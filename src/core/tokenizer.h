@@ -7,12 +7,12 @@
 
 #include <vector>
 
-#include "../common/data/doc.h"
-#include "../common/data/token.h"
+class Doc;
+class Term;
 
 class IDocTokenizer {
 public:
-    virtual int tokenize(CDoc doc, std::vector<CToken> &tokens) = 0;
+    virtual int tokenize(const Doc& ik_doc, std::vector<Term> &o_terms) = 0;
 
 };
 

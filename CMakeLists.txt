@@ -6,4 +6,4 @@ SET(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall")
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_subdirectory(apps)
+add_subdirectory(src)

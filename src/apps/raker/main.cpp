@@ -11,6 +11,14 @@ const char* const STOP_WORD_PATH = "D:/Project/remote/cpp/rakeman-engine/res/dic
 
 using namespace std;
 
+void process(cppjieba::Jieba &jieba, const string &k_str, int num) {
+    vector<string> tokens;
+    for (int i = 0; i < num; ++i) {
+        jieba.CutForSearch(k_str, tokens, true);
+    }
+}
+
+
 int main() {
     cppjieba::Jieba jieba(
             DICT_PATH,

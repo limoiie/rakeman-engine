@@ -6,9 +6,9 @@
 #define RAKEMAN_ENGINE_DOCTOKENIZERIMPL_H
 
 #include <memory>
+#include <utility>
 
 #include <cppjieba/Jieba.hpp>
-#include <utility>
 
 #include "tokenizer.h"
 
@@ -25,7 +25,11 @@ public:
      * successfully.
      */
     explicit CTokenizerImpl(std::shared_ptr<cppjieba::Jieba> jieba)
-            : m_jieba(std::move(jieba)) {}
+            : m_jieba(std::move(jieba)) {
+        // empty
+    }
+
+    ~CTokenizerImpl() override = default;
 
     int tokenize(const Doc& ik_doc, std::vector<Term>& o_tokens) override;
 

@@ -19,7 +19,7 @@ public:
      * return Process state code, 0 for success
      */
     virtual int normalize(std::vector<Term>& io_terms) = 0;
-
+    virtual ~INormalizer() = default;
 };
 
 #endif //RAKEMAN_ENGINE_NORMALIZER_H

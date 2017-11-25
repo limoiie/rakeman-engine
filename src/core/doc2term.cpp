@@ -2,7 +2,6 @@
 // Created by limo on 17-11-24.
 //
 
-#include <stdexcept>
 #include "doc2term.h"
 
 int CDoc2Term::doc2term(const Doc &ik_doc, std::vector<Term> &o_terms) {

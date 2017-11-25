@@ -10,7 +10,7 @@
 class CNormalizerImpl : public INormalizer {
 public:
     int normalize(std::vector<Term>& io_terms) override;
-
+    ~CNormalizerImpl() override = default;
 };
 
 

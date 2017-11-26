@@ -28,6 +28,7 @@ struct Term {
     TermLocation location;
     // offset of this term in doc
     int offset;
+    // todo: consider add term_id field (update operator< after added)
 
     explicit Term(long long int i_doc_id,
                   std::string i_term = "",
@@ -39,6 +40,33 @@ struct Term {
             prop(std::move(i_prop)),
             location(i_loc),
             offset(i_offset) {}
+
+    /**
+     * @brief Defined for counting tf in a doc
+     */
+    bool operator<(const Term &rhs) const {
+        if (doc_id < rhs.doc_id)
+            return true;
+        if (rhs.doc_id < doc_id)
+            return false;
+        if (term < rhs.term)
+            return true;
+        if (rhs.term < term)
+            return false;
+        return offset < rhs.offset;
+    }
+
+    bool operator>(const Term &rhs) const {
+        return rhs < *this;
+    }
+
+    bool operator<=(const Term &rhs) const {
+        return !(rhs < *this);
+    }
+
+    bool operator>=(const Term &rhs) const {
+        return !(*this < rhs);
+    }
 };
 
 #endif //RAKEMAN_ENGINE_TOKEN_H

@@ -9,11 +9,16 @@
 #include <list>
 #include <utility>
 #include <map>
+#include "map.h"
+#include "wrappedstlmap.hpp"
 
+/**
+ * @brief Posting Node
+ */
 struct PostingNode {
     long long int doc_id;
     int term_freq;
-    std::list<int> term_offsets;
+    std::list<int> term_offsets{};
 
     explicit PostingNode(long long int i_doc_id,
                          int i_tf = 0,
@@ -24,17 +29,31 @@ struct PostingNode {
 
 };
 
+/**
+ * @brief Postings map, the key of which is term, the value of which is the
+ * list of docs who contain that term
+ */
+// todo: replace this %CWrappedStlMap with a trie-map
+template <typename M = CWrappedStlMap<std::string, std::list<PostingNode>>>
 struct PostingsMap {
     typedef PostingNode node_type;
-    typedef std::list<node_type> list_type;
+    typedef std::string term_type;
+    typedef std::list<node_type> posting_type;
 
-    // todo: consider replacing map with trie
-    std::map<std::string, list_type> postings;
-    std::string term;
+    PostingsMap() : postings(std::make_shared<M>()) {}
 
-    explicit PostingsMap(std::string i_term)
-            : term(std::move(i_term)),
-              postings() {}
+    inline
+    posting_type& operator[](const term_type& i_key) {
+        return (*postings)[i_key];
+    }
+
+    inline
+    posting_type& operator[](term_type&& i_key) {
+        return (*postings)[std::move(i_key)];
+    }
+
+    // posting map
+    std::shared_ptr<IMap<term_type, posting_type, typename M::iterator>> postings;
 
 };
 

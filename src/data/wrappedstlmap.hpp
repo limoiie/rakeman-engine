@@ -9,6 +9,10 @@
 #include <map>
 #include "map.h"
 
+/**
+ * @brief This is just a temp implement of map used in %PostingsMap, consider
+ * constructing a TrieMap to replace this class in %PostingsMap
+ */
 template <typename K, typename V>
 class CWrappedStlMap : public IMap<K, V, typename std::map<K, V>::iterator> {
 public:
@@ -18,6 +22,8 @@ public:
     typedef typename base_map::item_type item_type;
     typedef typename base_map::iterator iterator;
     typedef typename base_map::size_type size_type;
+
+    ~CWrappedStlMap() override = default;
 
     val_type &operator[](const key_type &i_key) override {
         return m_proxy[i_key];

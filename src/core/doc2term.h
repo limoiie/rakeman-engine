@@ -18,11 +18,11 @@ public:
             : m_tokenizer(std::move(tokenizer)),
               m_normalizer(std::move(normalizer)) {}
 
-    int doc2term(const Doc& ik_doc, std::vector<Term> &o_terms);
+    int doc2term(const Doc& ik_doc, std::vector<Term> &o_terms) const;
 
 private:
-    std::shared_ptr<ITokenizer> m_tokenizer;
-    std::shared_ptr<INormalizer> m_normalizer;
+    std::shared_ptr<ITokenizer> m_tokenizer{};
+    std::shared_ptr<INormalizer> m_normalizer{};
 
 };
 

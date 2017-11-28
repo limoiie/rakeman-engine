@@ -14,4 +14,4 @@ set(DATA_SOURCE_FILES
         data/map.h
         data/wrappedstlmap.hpp)
 
-add_library(lib_rake_engine STATIC ${CORE_SOURCE_FILES} ${DATA_SOURCE_FILES})
+add_library(rake_engine STATIC ${CORE_SOURCE_FILES} ${DATA_SOURCE_FILES})

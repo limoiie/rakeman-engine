@@ -12,7 +12,7 @@
 class IFactory {
 public:
     virtual PostingsMap fetchPostings(std::vector<std::string> terms) = 0;
-    virtual bool storePostings(PostingsMap map) = 0;
+    virtual bool storePostings(const PostingsMap &map) = 0;
 };
 
 #endif //RAKEMAN_ENGINE_FACTORY_H

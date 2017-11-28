@@ -3,7 +3,9 @@ include_directories(../deps)
 set(CORE_SOURCE_FILES
         core/doc2term.cpp core/doc2term.h
         core/normalizer.h core/normalizerimpl.cpp core/normalizerimpl.h
-        core/tokenizer.h core/tokenizerimpl.cpp core/tokenizerimpl.h core/term2posting.h core/term2posting.cpp)
+        core/tokenizer.h core/tokenizerimpl.cpp core/tokenizerimpl.h
+        core/term2posting.h core/term2posting.cpp
+        apps/saker/postingsop.hpp)
 
 set(DATA_SOURCE_FILES
         data/doc.h

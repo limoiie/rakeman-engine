@@ -31,7 +31,7 @@ public:
 
     ~CTokenizerImpl() override = default;
 
-    int tokenize(const Doc& ik_doc, std::vector<Term>& o_tokens) override;
+    int tokenize(const std::string& ik_str, std::vector<std::string>& o_tokens) override;
 
 private:
     // the term engine used to tokenize doc to terms. this engine will not

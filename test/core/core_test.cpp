@@ -67,7 +67,7 @@ namespace {
 
     TEST(Doc2TermTest, tokenize) { // NOLINT
         auto p_tokenizer = create_tokenizer();
-        // todo: need to check if doc has been tokenize correctly
+        // todo: need to check if doc has+ been tokenize correctly
     }
 
     TEST(Doc2TermTest, normalize) { // NOLINT

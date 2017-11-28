@@ -19,7 +19,7 @@ public:
      *
      * return Process state code, 0 for success.
      */
-    virtual int tokenize(const Doc& ik_doc, std::vector<Term> &o_terms) = 0;
+    virtual int tokenize(const std::string& ik_str, std::vector<std::string> &o_terms) = 0;
     virtual ~ITokenizer() = default;;
 };
 

@@ -49,6 +49,14 @@ public:
         return m_proxy.erase(i_key);
     }
 
+    iterator begin() {
+        return m_proxy.begin();
+    }
+
+    iterator end() {
+        return m_proxy.end();
+    }
+
     bool empty() const override {
         return m_proxy.empty();
     }

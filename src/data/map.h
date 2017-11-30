@@ -28,11 +28,12 @@ public:
     virtual size_type erase(const key_type& i_key) = 0;
 
     virtual iterator find(const key_type& i_key) = 0;
-
     virtual size_type count(const key_type& i_key) const = 0;
 
-    virtual bool empty() const = 0;
+    virtual iterator begin() = 0;
+    virtual iterator end() = 0;
 
+    virtual bool empty() const = 0;
     virtual void clear() = 0;
 
     virtual ~IMap() = default;

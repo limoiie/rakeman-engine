@@ -9,8 +9,10 @@
 #include <list>
 #include <utility>
 #include <map>
+
 #include "map.h"
 #include "wrappedstlmap.hpp"
+#include "common/serializer.h"
 
 /**
  * @brief Posting Node
@@ -20,20 +22,28 @@ struct PostingNode {
     int term_freq;
     std::list<int> term_offsets{};
 
-    explicit PostingNode(long long int i_doc_id = -1,
+    PostingNode(long long int i_doc_id = -1,
                          int i_tf = 0,
                          std::list<int> i_offsets = {})
             : doc_id(i_doc_id),
               term_freq(i_tf),
               term_offsets(std::move(i_offsets)) {}
 
-    static std::string serialize(const PostingNode &node) {
-        std::string str = "";
+    static std::string Serialize(const PostingNode &node) {
+        std::string str;
+        size_t offset = 0;
+        offset += serialize(node.doc_id, str, offset);
+        serialize(node.term_freq, str, offset);
+        // todo: add list serialize
         return str;
     }
 
-    static PostingNode deserialize(const std::string &str) {
+    static PostingNode Deserialize(const std::string &str) {
         PostingNode node(-1);
+        size_t offset = 0;
+        offset += deserialize(str, offset, node.doc_id);
+        deserialize(str, offset, node.term_freq);
+        // todo: add list deserialize
         return node;
     }
 

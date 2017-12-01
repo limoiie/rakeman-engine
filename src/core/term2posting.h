@@ -19,7 +19,7 @@ class Term;
 class CTerm2Posting {
 public:
     int term2posting(std::vector<Term> &i_terms,
-                     PostingsMap<>& o_postings) const;
+                     PostingsMap& o_postings) const;
 
 };
 

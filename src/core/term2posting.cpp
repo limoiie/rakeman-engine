@@ -9,7 +9,7 @@
 #include "../data/term.h"
 
 int CTerm2Posting::term2posting(std::vector<Term> &i_terms,
-                                PostingsMap<> &o_postings) const {
+                                PostingsMap &o_postings) const {
     if (i_terms.empty()) return 0;
 
     // sort terms by doc id in order to counting tf in one doc

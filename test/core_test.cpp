@@ -124,7 +124,7 @@ namespace {
         terms.emplace_back(0, key1);
         terms.emplace_back(1, key3);
 
-        PostingsMap<> postings;
+        PostingsMap postings;
         CTerm2Posting term2Posting;
         term2Posting.term2posting(terms, postings);
 

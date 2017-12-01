@@ -1,4 +1,7 @@
+include_directories(.)
 include_directories(../deps)
+include_directories(../deps/cppredis/includes)
+include_directories(../deps/cppredis/tacopie/includes)
 
 set(CORE_SOURCE_FILES
         core/doc2term.cpp core/doc2term.h

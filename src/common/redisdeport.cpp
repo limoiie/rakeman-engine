@@ -12,31 +12,31 @@ CRedisDeport::CRedisDeport(std::string host, size_t port)
         : m_host(std::move(host)), m_port(port), m_client(),
           m_state(UNCONNECTED) {}
 
-PostingsMap CRedisDeport::fetchPostings(std::vector<std::string> &terms) {
+bool CRedisDeport::fetchPostings(std::vector<std::string> &terms, PostingsMap &map) {
     if (m_state == CONNECTED) {
         std::vector<
-                std::pair<std::string,
+                std::pair<const std::string &,
                         std::future<cpp_redis::reply>>
-        > futures(terms.size());
+        > futures;
         for (const auto &term : terms)
-            futures.emplace_back(term, std::move(m_client.lrange(term, 0, -1)));
+            futures.emplace_back(term, m_client.lrange(term, 0, -1));
         m_client.commit();
 
-        PostingsMap map;
         for (auto &fut : futures) {
             auto reps = fut.second.get();
             if (reps.is_error())
                 throw std::runtime_error("Fetch failed from redis");
             auto &node_list = map[fut.first];
             for (const auto &rep : reps.as_array()) {
-                node_list.push_back(PostingNode::deserialize(rep.as_string()));
+                node_list.push_back(PostingNode::Deserialize(rep.as_string()));
             }
         }
-        return map;
+        return true;
     }
-    return nullptr;
+    return false;
 }
 
+// todo: try to store postings in string not in list
 bool CRedisDeport::storePostings(PostingsMap &map) {
     if (m_state == CONNECTED) {
         std::vector<std::string> nodes;
@@ -46,8 +46,8 @@ bool CRedisDeport::storePostings(PostingsMap &map) {
         for (; st_itr != ed_itr; ++st_itr) {
             nodes.clear();
             for (const auto &node : st_itr->second)
-                nodes.push_back(PostingNode::serialize(node));
-            reply_list.push_back(std::move(m_client.rpush(st_itr->first, nodes)));
+                nodes.push_back(PostingNode::Serialize(node));
+            reply_list.push_back(m_client.rpush(st_itr->first, nodes));
         }
         m_client.commit();
         // wait for completing commands
@@ -103,6 +103,6 @@ bool CRedisDeport::disconnect() {
     return true;
 }
 
-State CRedisDeport::connectState() {
+CRedisDeport::State CRedisDeport::connectState() {
     return m_state;
 }

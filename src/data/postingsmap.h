@@ -22,7 +22,7 @@ struct PostingNode {
     int term_freq;
     std::list<int> term_offsets{};
 
-    PostingNode(long long int i_doc_id = -1,
+    PostingNode(long long int i_doc_id = -1, // NOLINT
                 int i_tf = 0,
                 std::list<int> i_offsets = {})
             : doc_id(i_doc_id),

@@ -8,7 +8,6 @@ set(CORE_SOURCE_FILES
         core/normalizer.h core/normalizerimpl.cpp core/normalizerimpl.h
         core/tokenizer.h core/tokenizerimpl.cpp core/tokenizerimpl.h
         core/term2posting.h core/term2posting.cpp
-        common/deport.h
         )
 
 set(SAKER_SOURCE_FILES
@@ -20,7 +19,18 @@ set(SAKER_SOURCE_FILES
         saker/queryexpresser/bsconjunction.h
         saker/queryexpresser/bsintersect.cpp
         saker/queryexpresser/bsintersect.h
-        saker/queryexpresser/bsexclude.cpp saker/queryexpresser/bsexclude.h)
+        saker/queryexpresser/bsexclude.cpp
+        saker/queryexpresser/bsexclude.h
+        saker/queryexpresser/bsfetchpostings.cpp
+        saker/queryexpresser/bsfetchpostings.h
+        )
+
+set(COMMON_SOURCE_FILES
+        common/deport.h
+        common/redisdeport.cpp
+        common/redisdeport.h
+        common/serializer.h
+        common/factory/factory.h common/factory/deportfactory.h common/factory/factoryfactory.cpp common/factory/factoryfactory.h)
 
 set(DATA_SOURCE_FILES
         data/doc.h
@@ -28,13 +38,11 @@ set(DATA_SOURCE_FILES
         data/postingsmap.h
         data/map.h
         data/wrappedstlmap.hpp
-        common/redisdeport.cpp
-        common/redisdeport.h
-        common/serializer.h
         )
 
 add_library(rake_engine STATIC
         ${CORE_SOURCE_FILES}
         ${DATA_SOURCE_FILES}
         ${SAKER_SOURCE_FILES}
+        ${COMMON_SOURCE_FILES}
         )

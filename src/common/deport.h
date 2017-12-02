@@ -2,8 +2,8 @@
 // Created by limo on 2017/11/28.
 //
 
-#ifndef RAKEMAN_ENGINE_FACTORY_H
-#define RAKEMAN_ENGINE_FACTORY_H
+#ifndef RAKEMAN_ENGINE_DEPORT_H
+#define RAKEMAN_ENGINE_DEPORT_H
 
 #include <vector>
 
@@ -18,7 +18,7 @@ public:
         CONNECTED
     };
 
-    virtual bool fetchPostings(std::vector<std::string> &terms, PostingsMap &map) = 0;
+    virtual bool fetchPostings(const std::vector<std::string> &terms, PostingsMap &map) = 0;
     virtual bool storePostings(PostingsMap &map) = 0;
 
     virtual bool connect() = 0;
@@ -27,4 +27,4 @@ public:
 
 };
 
-#endif //RAKEMAN_ENGINE_FACTORY_H
+#endif //RAKEMAN_ENGINE_DEPORT_H

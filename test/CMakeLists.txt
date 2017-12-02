@@ -27,6 +27,7 @@ target_link_libraries(run_serialize_tests gtest gtest_main)
 
 target_link_libraries(run_queryexpresser gtest gtest_main)
 target_link_libraries(run_queryexpresser rake_engine)
+target_link_libraries(run_queryexpresser cppredis)
 
 add_executable(cpp_redis_tests cppredis_test.cpp)
 target_link_libraries(cpp_redis_tests rake_engine)

@@ -6,6 +6,8 @@
 #include <iostream>
 #include <saker/queryexpresser/statement.h>
 #include <saker/queryexpresser/bsintersect.h>
+#include <common/factory/factoryfactory.h>
+#include <saker/queryexpresser/bsfetchpostings.h>
 
 #include "gtest/gtest.h"
 
@@ -37,9 +39,18 @@ namespace {
         ASSERT_EQ(res.front().term_freq, 999);
     }
 
+    TEST(QueryExpresserTests, FetchPostingsTest) { // NOLINT
+        std::list<PostingNode> nodes = {{123, 888}, {323, 999}, {7123, 777}};
+        BSFetchPostings bsFetchPostings("term1");
+        auto postings = bsFetchPostings.express();
+        ASSERT_EQ(nodes, postings);
+    }
+
 }
 
 int main(int argc, char **argv) {
+    CFactoryFactory::initialize();
+
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }

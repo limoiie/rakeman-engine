@@ -3,10 +3,9 @@
 //
 
 #include <string>
+#include <saker/postingsop.hpp>
 
 #include "gtest/gtest.h"
-
-#include "apps/saker/postingsop.hpp"
 
 namespace {
     using namespace std;

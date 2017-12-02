@@ -17,12 +17,15 @@ namespace saker {
         TRIVIAL,
         AND,
         OR,
-        NOT
+        NOT,
+        FETCH
     };
 
     class IStatement {
     public:
         explicit IStatement(StatOp op) : op(op) {}
+        virtual ~IStatement() = default;
+
         virtual result_type express() = 0;
 
         const StatOp op;

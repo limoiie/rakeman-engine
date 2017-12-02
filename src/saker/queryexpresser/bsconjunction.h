@@ -13,6 +13,7 @@ namespace saker {
     public:
         explicit BSConjunction(std::shared_ptr<IStatement> cmd1,
                                std::shared_ptr<IStatement> cmd2);
+        ~BSConjunction() override = default;
 
         result_type express() override;
     };

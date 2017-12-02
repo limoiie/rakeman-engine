@@ -19,6 +19,7 @@ namespace saker {
                 : IStatement(op),
                   m_statement1(std::move(stm1)),
                   m_statement2(std::move(stm2)) {}
+        ~IBiStatement() override = default;
 
     protected:
         std::shared_ptr<IStatement> m_statement1{};

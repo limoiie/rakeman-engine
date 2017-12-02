@@ -13,6 +13,7 @@ namespace saker {
     public:
         explicit BSExclude(std::shared_ptr<IStatement> stm1,
                            std::shared_ptr<IStatement> stm2);
+        ~BSExclude() override = default;
 
         result_type express() override;
     };

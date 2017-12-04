@@ -7,7 +7,7 @@
 
 #include <vector>
 
-#include "../data/postingsmap.h"
+#include "data/postingsmap.h"
 
 class IDeport {
 public:

@@ -6,8 +6,8 @@
 #define RAKEMAN_ENGINE_DEPORTFACTORY_H
 
 #include <common/factory/factory.h>
-#include <common/deport.h>
-#include <common/redisdeport.h>
+#include <common/deport/deport.h>
+#include <common/deport/redisdeport.h>
 
 #include <utility>
 

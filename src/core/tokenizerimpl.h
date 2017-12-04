@@ -33,6 +33,8 @@ public:
 
     int tokenize(const std::string& ik_str, std::vector<std::string>& o_tokens) override;
 
+    int tokenize(const std::string &ik_str, std::vector<Term> &o_terms) override;
+
 private:
     // the term engine used to tokenize doc to terms. this engine will not
     // change its context while it is tokenizing, which means it can be used
@@ -41,6 +43,5 @@ private:
     std::shared_ptr<cppjieba::Jieba> m_jieba;
 
 };
-
 
 #endif //RAKEMAN_ENGINE_DOCTOKENIZERIMPL_H

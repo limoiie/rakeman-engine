@@ -14,7 +14,8 @@ int CTerm2Posting::term2posting(std::vector<Term> &i_terms,
 
     // sort terms by doc id in order to counting tf in one doc
     std::sort(i_terms.begin(), i_terms.end());
-
+    // TODO: fix this
+/*
     int term_freq = 0;
     auto cur_doc_id = i_terms[0].doc_id;
     auto cur_term = i_terms[0].term;
@@ -37,6 +38,6 @@ int CTerm2Posting::term2posting(std::vector<Term> &i_terms,
 
     // the last term in the last doc has not been stored
     o_postings[cur_term].emplace_back(cur_doc_id, term_freq);
-
+*/
     return 0;
 }

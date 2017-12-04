@@ -7,7 +7,7 @@
 #include <saker/queryexpresser/statement.h>
 #include <saker/queryexpresser/bsintersect.h>
 #include <common/factory/factoryfactory.h>
-#include <saker/queryexpresser/bsfetchpostings.h>
+#include <saker/queryexpresser/sfetchpostings.h>
 
 #include "gtest/gtest.h"
 
@@ -41,7 +41,7 @@ namespace {
 
     TEST(QueryExpresserTests, FetchPostingsTest) { // NOLINT
         std::list<PostingNode> nodes = {{123, 888}, {323, 999}, {7123, 777}};
-        BSFetchPostings bsFetchPostings("term1");
+        SFetchPostings bsFetchPostings("term1");
         auto postings = bsFetchPostings.express();
         ASSERT_EQ(nodes, postings);
     }

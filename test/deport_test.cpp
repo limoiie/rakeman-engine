@@ -4,8 +4,8 @@
 
 #include "gtest/gtest.h"
 
-#include <common/deport.h>
-#include <common/redisdeport.h>
+#include <common/deport/deport.h>
+#include <common/deport/redisdeport.h>
 
 namespace {
     using namespace std;

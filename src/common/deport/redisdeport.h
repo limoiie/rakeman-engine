@@ -13,7 +13,8 @@ class CRedisDeport : public IDeport {
 public:
     explicit CRedisDeport(std::string host, size_t port);
 
-    bool fetchPostings(const std::vector<std::string> &terms, PostingsMap &map) override ;
+    bool fetchPostings(const std::vector<std::string> &terms, PostingsMap &map) override;
+    bool fetchPostings(const std::vector<std::string> &terms, std::vector<std::list<PostingNode>> &nodes) override;
     bool storePostings(PostingsMap &map) override;
 
     bool connect() override;

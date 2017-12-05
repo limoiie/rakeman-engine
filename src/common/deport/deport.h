@@ -19,6 +19,8 @@ public:
     };
 
     virtual bool fetchPostings(const std::vector<std::string> &terms, PostingsMap &map) = 0;
+    virtual bool fetchPostings(const std::vector<std::string> &terms, std::vector<std::list<PostingNode>> &nodes) = 0;
+
     virtual bool storePostings(PostingsMap &map) = 0;
 
     virtual bool connect() = 0;

@@ -37,6 +37,31 @@ bool CRedisDeport::fetchPostings(const std::vector<std::string> &terms, Postings
     return true;
 }
 
+bool CRedisDeport::fetchPostings(const std::vector<std::string> &terms, std::vector<std::list<PostingNode>> &nodes) {
+    if (m_state != CONNECTED)
+        if (!connect())
+            throw std::runtime_error("Connect redis failed!");
+
+    std::vector<std::pair<int, std::future<cpp_redis::reply>>> futures;
+    for (int i = 0; i < terms.size(); ++i)
+        futures.emplace_back(i, m_client.lrange(terms[i], 0, -1));
+    m_client.commit();
+
+    nodes.resize(terms.size());
+
+    for (auto &fut : futures) {
+        auto reps = fut.second.get();
+        if (reps.is_error())
+            throw std::runtime_error("Fetch failed from redis");
+
+        auto &node_list = nodes[fut.first];
+        for (const auto &rep : reps.as_array()) {
+            node_list.push_back(PostingNode::Deserialize(rep.as_string()));
+        }
+    }
+    return true;
+}
+
 // todo: try to store postings in string not in list
 bool CRedisDeport::storePostings(PostingsMap &map) {
     if (m_state != CONNECTED)

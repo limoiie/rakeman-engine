@@ -48,7 +48,7 @@ void ConjunctLists(const std::list<T> &i_lt1,
             o_lt3.push_back(*itr1);
             ++itr1;
         } else if (comp(*itr1, *itr2) > 0) {
-            o_lt3.push_back(*itr1);
+            o_lt3.push_back(*itr2);
             ++itr2;
         } else {
             o_lt3.push_back(*itr1);
@@ -73,7 +73,6 @@ void ExcludeLists(const std::list<T> &i_src,
             o_tgt.push_back(*itr1);
             ++itr1;
         } else if (comp(*itr1, *itr2) > 0) {
-            o_tgt.push_back(*itr1);
             ++itr2;
         } else {
             ++itr1; ++itr2;

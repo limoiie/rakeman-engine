@@ -8,17 +8,46 @@
 #include <string>
 #include <list>
 #include <data/postingsmap.h>
-#include <saker/queryexpresser/statement.h>
+#include <vector>
 
 namespace saker {
 
     class CQueryExpresser {
     public:
-        result_type express(const std::string &query);
+        std::vector<PostingNode> express(const std::string &query);
 
     private:
-        void lexical();
-        void parser();
+        /**
+         * Prepare for query processing
+         */
+        void __prepare();
+        /**
+         * Scan query and split it into string block and operators which are
+         * like +, - and *. If there comes a %stop_c, just return.
+         */
+        void __scanner(const std::string &query, char stop_c = '\0');
+        /**
+         * Break the query block which contains no operators but is too big
+         * into smaller string block and some meaningful operators.
+         */
+        void __scanner_breakBlock(std::string &block);
+
+        /**
+         * Optimize the syntax structure: remove redundancy string block...
+         */
+        void __optimal();
+        /**
+         * Express the syntax structure.
+         */
+        void __execute();
+
+        size_t m_offset;
+        // used to store elements included term-index, op-code ...
+        std::vector<int> m_elems;
+        // used to store terms
+        std::vector<std::string> m_terms;
+        // used to store the execute result
+        std::vector<PostingNode> m_result;
 
     };
 

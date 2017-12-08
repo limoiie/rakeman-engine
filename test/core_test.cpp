@@ -83,7 +83,7 @@ namespace {
         ASSERT_GT(str_terms.size(), static_cast<size_t>(10));
     }
 
-    TEST(Term2PostingTest, term2posting) { // NOLINT
+    TEST(Term2PostingTest, term2postings) { // NOLINT
         /* TODO: fix this up
         string key1 = "免受";
         string key2 = "灾难";

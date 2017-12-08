@@ -8,18 +8,20 @@
 #include <string>
 #include <utility>
 
+typedef long long int doc_id_t;
+
 /*
  * @brief Doc contains strings of a document. Doc will be constructed with info
  * fetched from db.
  */
 struct Doc {
-    long long int id;
+    doc_id_t id;
     std::string title;
     std::string content;
     std::string source;
     std::string url;
 
-    explicit Doc(long long int i_id,
+    explicit Doc(doc_id_t i_id,
                  std::string i_title,
                  std::string i_content,
                  std::string i_source,

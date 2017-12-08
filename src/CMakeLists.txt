@@ -5,23 +5,15 @@ include_directories(../deps/cppredis/tacopie/includes)
 
 set(CORE_SOURCE_FILES
         core/tokenizer.h core/tokenizerimpl.cpp core/tokenizerimpl.h
-        core/term2posting.h core/term2posting.cpp
-        )
+        core/termprocess.h core/termprocess.cpp)
+
+set(RAKER_SOURCE_FILES
+        raker/docindexer.cpp raker/docindexer.h)
 
 set(SAKER_SOURCE_FILES
         saker/postingsop.hpp
         saker/queryexpresser/queryexpresser.h
         saker/queryexpresser/queryexpresser.cpp
-        saker/queryexpresser/statement.h
-        saker/queryexpresser/binarystatement.h
-        saker/queryexpresser/bsconjunction.cpp
-        saker/queryexpresser/bsconjunction.h
-        saker/queryexpresser/bsintersect.cpp
-        saker/queryexpresser/bsintersect.h
-        saker/queryexpresser/bsexclude.cpp
-        saker/queryexpresser/bsexclude.h
-        saker/queryexpresser/sfetchpostings.cpp
-        saker/queryexpresser/sfetchpostings.h
         )
 
 set(COMMON_SOURCE_FILES
@@ -48,5 +40,6 @@ add_library(rake_engine STATIC
         ${CORE_SOURCE_FILES}
         ${DATA_SOURCE_FILES}
         ${COMMON_SOURCE_FILES}
+        ${RAKER_SOURCE_FILES}
         ${SAKER_SOURCE_FILES}
         )

@@ -16,12 +16,17 @@ public:
     bool fetchPostings(const std::vector<std::string> &terms, PostingsMap &map) override;
     bool fetchPostings(const std::vector<std::string> &terms, std::vector<std::list<PostingNode>> &nodes) override;
     bool storePostings(PostingsMap &map) override;
+    bool storePostings(const std::vector<std::string> &terms, std::vector<std::list<PostingNode>> &nodes) override;
+
+    bool deleteKey(const std::vector<std::string> &keys) override;
 
     bool connect() override;
     bool disconnect() override;
     State connectState() override;
 
 private:
+    void __assertConnected();
+
     // redis host
     std::string m_host;
     // redis port

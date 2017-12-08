@@ -22,6 +22,9 @@ public:
     virtual bool fetchPostings(const std::vector<std::string> &terms, std::vector<std::list<PostingNode>> &nodes) = 0;
 
     virtual bool storePostings(PostingsMap &map) = 0;
+    virtual bool storePostings(const std::vector<std::string> &terms, std::vector<std::list<PostingNode>> &nodes) = 0;
+
+    virtual bool deleteKey(const std::vector<std::string> &keys) = 0;
 
     virtual bool connect() = 0;
     virtual bool disconnect() = 0;

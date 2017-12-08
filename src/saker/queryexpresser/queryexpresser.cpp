@@ -55,30 +55,32 @@ void saker::CQueryExpresser::__scanner(const std::string &query, char stop_c) {
 }
 
 void saker::CQueryExpresser::__scanner_breakBlock(std::string &block) {
-    if (!block.empty()) {
-        m_elems.push_back(k_LT);
+    auto tokenizer = CFactoryFactory::getInstance()
+            ->getTokenizerFactory()
+            ->get(CFactory<ITokenizer>::ProductType::DEFAULT);
+    std::vector<Term> terms, purge_terms;
+    // tokenize string to terms which will contains ',.' ...
+    tokenizer->tokenize(block, terms);
+    // filter out ',.' ...
+    filterOutX(terms, purge_terms);
 
-        auto tokenizer = CFactoryFactory::getInstance()
-                ->getTokenizerFactory()
-                ->get(CFactory<ITokenizer>::ProductType::DEFAULT);
-        std::vector<Term> terms, purge_terms;
-        // tokenize string to terms which will contains ',.' ...
-        tokenizer->tokenize(block, terms);
-        // filter out ',.' ...
-        filterOutX(terms, purge_terms);
-
-        if (!purge_terms.empty()) {
-            m_elems.push_back(static_cast<int>(m_terms.size()));
-            m_terms.push_back(purge_terms.front().term);
-
-            for (unsigned int i = 1; i < purge_terms.size(); ++i) {
-                m_elems.push_back(k_OR);
-                m_elems.push_back(static_cast<int>(m_terms.size()));
-                m_terms.push_back(purge_terms[i].term);
-            }
+    if (!purge_terms.empty()) {
+        if (purge_terms.size() > 1) {
+            m_elems.push_back(k_LT);
         }
 
-        m_elems.push_back(k_RT);
+        m_elems.push_back(static_cast<int>(m_terms.size()));
+        m_terms.push_back(purge_terms.front().term);
+
+        for (unsigned int i = 1; i < purge_terms.size(); ++i) {
+            m_elems.push_back(k_OR);
+            m_elems.push_back(static_cast<int>(m_terms.size()));
+            m_terms.push_back(purge_terms[i].term);
+        }
+
+        if (purge_terms.size() > 1) {
+            m_elems.push_back(k_RT);
+        }
     }
     block.clear();
 }
@@ -99,45 +101,12 @@ void saker::CQueryExpresser::__execute() {
     std::vector<int> operates, operands;
     for (auto elem : m_elems) {
         switch (elem) {
+            case k_RT:
+                // pop out of stack for execution until %k_LT
+                __execute_popAndExecute(operates, operands, nodes); break;
             case k_LT: case k_AD: case k_OR: case k_NT:
                 // push into stack until %k_RT
                 operates.push_back(elem); break;
-            case k_RT:
-                // pop out of stack for execution until %k_LT
-                while (!operates.empty()) {
-                    if (operates.back() == k_LT) {
-                        operates.pop_back();
-                        break;
-                    }
-
-                    // push back one empty list used for storing execute result
-                    nodes.emplace_back();
-
-                    // pop out operands
-                    int rhv = operands.back();
-                    operands.pop_back();
-                    int lhv = operands.back();
-                    operands.pop_back();
-
-                    // pop out operator and execute
-                    switch (operates.back()) {
-                        case k_AD:
-                            IntersectLists(nodes[lhv], nodes[rhv], nodes.back());
-                            break;
-                        case k_OR:
-                            ConjunctLists(nodes[lhv], nodes[rhv], nodes.back());
-                            break;
-                        case k_NT:
-                            ExcludeLists(nodes[lhv], nodes[rhv], nodes.back());
-                            break;
-                        default:
-                            throw std::runtime_error("Not support operator!");
-                    }
-                    operates.pop_back();
-
-                    operands.push_back(static_cast<int>(nodes.size() - 1));
-                }
-                break;
             default:
                 operands.push_back(elem);
         }
@@ -147,5 +116,42 @@ void saker::CQueryExpresser::__execute() {
     m_result.reserve(nodes[operands.back()].size());
     for (auto &node : nodes[operands.back()]) {
         m_result.push_back(std::move(node));
+    }
+}
+
+void saker::CQueryExpresser::__execute_popAndExecute(std::vector<int> &operates,
+                                                     std::vector<int> &operands,
+                                                     std::vector<std::list<PostingNode>>& nodes) {
+    while (!operates.empty()) {
+        if (operates.back() == k_LT) {
+            operates.pop_back();
+            return;
+        }
+
+        // pop out operands
+        int rhv = operands.back();
+        operands.pop_back();
+        int lhv = operands.back();
+        operands.pop_back();
+
+        // push back one empty list used for storing execute result
+        nodes.emplace_back();
+        // pop out operator and execute
+        switch (operates.back()) {
+            case k_AD:
+                IntersectLists(nodes[lhv], nodes[rhv], nodes.back());
+                break;
+            case k_OR:
+                ConjunctLists(nodes[lhv], nodes[rhv], nodes.back());
+                break;
+            case k_NT:
+                ExcludeLists(nodes[lhv], nodes[rhv], nodes.back());
+                break;
+            default:
+                throw std::runtime_error("Not support operator!");
+        }
+        operates.pop_back();
+
+        operands.push_back(static_cast<int>(nodes.size() - 1));
     }
 }

@@ -41,6 +41,10 @@ namespace saker {
          */
         void __execute();
 
+        void __execute_popAndExecute(std::vector<int>& operates,
+                                     std::vector<int>& operands,
+                                     std::vector<std::list<PostingNode>>& nodes);
+
         size_t m_offset;
         // used to store elements included term-index, op-code ...
         std::vector<int> m_elems;

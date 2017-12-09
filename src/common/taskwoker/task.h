@@ -5,30 +5,26 @@
 #ifndef RAKEMAN_ENGINE_TASK_H
 #define RAKEMAN_ENGINE_TASK_H
 
+#include <string>
+#include <memory>
 
 enum TaskType {
-    DOC_TOKENIZE
-    // todo
+    BREAK_DOCUMENT_BLOCK,
+    SORT_UNSORTED_POSTING_LIST,
 };
-
-class CTaskMeta {
-    // todo
-};
-
 
 class ITask {
 public:
+    explicit ITask(TaskType type) : m_type(type) {}
+    virtual ~ITask() = default;
+
     virtual int work() = 0;
 
-    const TaskType type;
+    static std::shared_ptr<ITask> Deserialize(const std::string &str);
 
 protected:
-    ITask(TaskType type, int task_id) : type(type), m_task_id(task_id) {}
-
-private:
-    int m_task_id;
+    const TaskType m_type;
 
 };
-
 
 #endif //RAKEMAN_ENGINE_TASK_H

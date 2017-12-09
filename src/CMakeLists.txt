@@ -28,7 +28,9 @@ set(COMMON_SOURCE_FILES
         common/factory/tokenizerfactory.h
         common/taskwoker/worker.h
         common/taskwoker/task.h
-        common/taskwoker/woker.cpp common/taskwoker/task.cpp)
+        common/taskwoker/woker.cpp
+        common/taskwoker/task.cpp
+        )
 
 set(DATA_SOURCE_FILES
         data/doc.h
@@ -36,12 +38,19 @@ set(DATA_SOURCE_FILES
         data/postingsmap.h
         data/map.h
         data/wrappedstlmap.hpp
-        data/taskqueue.h data/redistaskqueue.cpp data/redistaskqueue.h common/taskwoker/breakdocblocktask.cpp common/taskwoker/breakdocblocktask.h common/taskwoker/sortunsortedpostinglisttask.cpp common/taskwoker/sortunsortedpostinglisttask.h)
+        data/taskqueue.h
+        data/redistaskqueue.cpp
+        data/redistaskqueue.h
+        common/taskwoker/breakdocblocktask.cpp
+        common/taskwoker/breakdocblocktask.h
+        common/taskwoker/sortunsortedpostinglisttask.cpp
+        common/taskwoker/sortunsortedpostinglisttask.h
+        )
 
 add_library(rake_engine STATIC
+        ${COMMON_SOURCE_FILES}
         ${CORE_SOURCE_FILES}
         ${DATA_SOURCE_FILES}
-        ${COMMON_SOURCE_FILES}
         ${RAKER_SOURCE_FILES}
         ${SAKER_SOURCE_FILES}
         )

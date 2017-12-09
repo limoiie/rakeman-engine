@@ -5,6 +5,7 @@
 #include <string>
 #include <iostream>
 
+#include <common/serializer.h>
 #include <common/factory/factory.h>
 #include <common/factory/deportfactory.h>
 #include <common/factory/factoryfactory.h>
@@ -45,7 +46,7 @@ namespace {
 
         CQueryExpresser express;
         auto nodes = express.express(query_string);
-        ASSERT_EQ(nodes.size(), 3);
+        ASSERT_EQ(nodes.size(), static_cast<size_t>(3));
         ASSERT_EQ(nodes[0].doc_id, 1);
         ASSERT_EQ(nodes[1].doc_id, 3);
         ASSERT_EQ(nodes[2].doc_id, 5);

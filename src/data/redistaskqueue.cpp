@@ -7,6 +7,9 @@
 // This string is used as the key of task queue in redis
 const char *KEY_MSG_QUEUE = "TASK_QUEUE";
 
+// This string is used as the key of response queue in redis
+const char *KEY_RESPONSE_QUEUE = "RESPONSE_QUEUE";
+
 std::shared_ptr<ITask> CRedisTaskQueue::waitForPopTask() {
     __assertConnected();
 

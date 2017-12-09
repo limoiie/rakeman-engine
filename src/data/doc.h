@@ -55,20 +55,4 @@ struct Doc {
 
 };
 
-// TODO: This is not the complete version, fix up this if need
-template <>
-bool serialize<Doc>(const Doc &val, std::string &bytes, size_t &offset) {
-    serialize(val.id, bytes, offset);
-    serialize(val.content, bytes, offset);
-    return true;
-}
-
-// TODO: This is not the complete version, fix up this if need
-template <>
-bool deserialize<Doc>(const std::string &bytes, size_t &offset, Doc &doc) {
-    deserialize(bytes, offset, doc.id);
-    deserialize(bytes, offset, doc.content);
-    return true;
-}
-
 #endif //RAKEMAN_ENGINE_DOC_H

@@ -7,6 +7,7 @@
 
 #include <string>
 #include <list>
+#include <data/doc.h>
 
 typedef char char_t;
 
@@ -74,7 +75,8 @@ bool deserialize(const std::string &bytes, size_t &offset, T &val) {
  * @return Serialize status
  */
 template <>
-bool serialize<std::string>(const std::string &val, std::string &bytes, size_t &offset) {
+inline
+bool serialize(const std::string &val, std::string &bytes, size_t &offset) {
     // is the reserve right here?
     bytes.reserve(offset);
 
@@ -96,7 +98,8 @@ bool serialize<std::string>(const std::string &val, std::string &bytes, size_t &
  * Deserialize from %std::string
  */
 template <>
-bool deserialize<std::string>(const std::string &bytes, size_t &offset, std::string &val) {
+inline
+bool deserialize(const std::string &bytes, size_t &offset, std::string &val) {
     val.clear();
 
     // step 1: deserialize size
@@ -111,6 +114,24 @@ bool deserialize<std::string>(const std::string &bytes, size_t &offset, std::str
 
     // step 3: update offset
     offset += size_of_val;
+    return true;
+}
+
+// TODO: This is not the complete version, fix up this if need
+template <>
+inline
+bool serialize<Doc>(const Doc &val, std::string &bytes, size_t &offset) {
+    serialize(val.id, bytes, offset);
+    serialize(val.content, bytes, offset);
+    return true;
+}
+
+// TODO: This is not the complete version, fix up this if need
+template <>
+inline
+bool deserialize<Doc>(const std::string &bytes, size_t &offset, Doc &val) {
+    deserialize(bytes, offset, val.id);
+    deserialize(bytes, offset, val.content);
     return true;
 }
 

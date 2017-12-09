@@ -6,7 +6,6 @@
 #include <iostream>
 
 #include "gtest/gtest.h"
-#include "core/term2posting.h"
 #include "core/tokenizerimpl.h"
 #include "data/doc.h"
 
@@ -55,15 +54,6 @@ namespace {
         return Doc(id, "title", content, "cnn", "http://www.baidu.com");
     }
 
-    TEST(Doc2TermTest, tag) { // NOLINT
-        auto jieba = create_jieba();
-        std::vector<std::pair<std::string, std::string>> pairs;
-        jieba->Tag(doc1, pairs);
-        for (auto &p : pairs)
-            cout << p.first << " " << p.second << endl;
-        cout << "PASS!" << endl;
-    }
-
     TEST(Doc2TermTest, tokenizer) { // NOLINT
         auto p_tokenizer = create_tokenizer();
 
@@ -109,7 +99,7 @@ namespace {
 
         PostingsMap postings;
         CTerm2Posting term2Posting;
-        term2Posting.term2posting(terms, postings);
+        term2Posting.Terms2PostingList(terms, postings);
 
         ASSERT_EQ(postings[key1].size(), 2);
         ASSERT_EQ(postings[key2].size(), 2);

@@ -5,7 +5,8 @@
 #include <string>
 #include <iostream>
 #include <data/postingsmap.h>
-#include <data/doc.h>
+
+#include <common/serializer.h>
 
 #include "gtest/gtest.h"
 

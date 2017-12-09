@@ -2,62 +2,23 @@
 // Created by limo on 12/7/17.
 //
 
-#include <data/term.h>
-#include <data/doc.h>
-#include <data/postingsmap.h>
-#include <algorithm>
-#include <common/factory/factoryfactory.h>
 #include "docindexer.h"
 
-typedef std::vector<std::pair<doc_id_t, std::vector<Term>>> doc_terms_pair_t;
+#include <data/term.h>
+#include <common/factory/factoryfactory.h>
 
-/*
- * @brief Posting terms to posting lists which are used on purpose of decreasing
- * space used by storing term-doc pairs.
- */
-static int term2posting(const doc_terms_pair_t &i_terms, PostingsMap& o_postings);
-
-void ProcessDocs(const std::vector<Doc> &docs) {
+void Doc2Terms(const Doc &i_doc, std::vector<Term> &o_terms) {
     auto tokenizer = CFactoryFactory::getInstance()
             ->getTokenizerFactory()
             ->get(CFactory<ITokenizer>::DEFAULT);
 
-    doc_terms_pair_t doc_terms_pairs;
-    std::vector<Term> terms;
-    PostingsMap postingsMap;
-    for (const auto &doc : docs) {
-        tokenizer->tokenize(doc.content, terms);
-        doc_terms_pairs.emplace_back(doc.id, std::move(terms));
-        terms.clear();
-    }
-    term2posting(doc_terms_pairs, postingsMap);
+    tokenizer->tokenize(i_doc.title, o_terms);
+    tokenizer->tokenize(i_doc.content, o_terms);
 }
 
-void SortPostingListByTerm(const std::string &term) {
-    auto deport = CFactoryFactory::getInstance()
-            ->getDeportFactory()
-            ->get(CFactory<IDeport>::DEFAULT);
-
-    // step 1: fetch unsorted node by term
-    std::vector<std::list<PostingNode>> nodelists;
-    deport->fetchPostings(std::vector<std::string>{term}, nodelists);
-
-    // step 2: copy nodes from list into vector for quick sort
-    std::vector<PostingNode> nodes;
-    for (auto &node : nodelists[0])
-        nodes.push_back(std::move(node));
-
-    // step 3: sort nodes and store the sorted nodes into nodelist
-    std::sort(nodes.begin(), nodes.end());
-    std::copy(nodes.begin(), nodes.end(), nodelists[0].begin());
-
-    // step 4: store nodes into deport
-    deport->storePostings(std::vector<std::string>{term}, nodelists);
-}
-
-int term2posting(const doc_terms_pair_t &i_terms, PostingsMap& o_postings) {
-    if (i_terms.empty()) return 0;
-    // process document bu document
+void Terms2PostingList(const doc_id_map_terms_t &i_terms, PostingsMap &o_postings) {
+    if (i_terms.empty()) return;
+    // process document by document
     for (auto &doc_id_terms : i_terms) {
         auto doc_id = doc_id_terms.first;
         auto terms_by_doc = doc_id_terms.second;
@@ -81,5 +42,18 @@ int term2posting(const doc_terms_pair_t &i_terms, PostingsMap& o_postings) {
             o_postings[cur_term].emplace_back(doc_id, offsets.size(), offsets);
         }
     }
-    return 0;
+}
+
+void SortPostingList(std::list<PostingNode> &io_terms) {
+    // step 1: copy nodes from list into vector for doing quicker sort
+    std::vector<PostingNode> nodes;
+    for (auto &node : io_terms)
+        nodes.push_back(std::move(node));
+    io_terms.clear();
+
+    // step 2: sort nodes and store the sorted nodes into nodelist
+    std::sort(nodes.begin(), nodes.end());
+    for (auto &node : nodes) {
+        io_terms.push_back(std::move(node));
+    }
 }

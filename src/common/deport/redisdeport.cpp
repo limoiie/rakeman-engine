@@ -4,10 +4,6 @@
 
 #include "redisdeport.h"
 
-#include <utility>
-
-#include <cppredis/includes/cpp_redis/core/reply.hpp>
-
 CRedisDeport::CRedisDeport(std::string host, size_t port)
         : m_host(std::move(host)), m_port(port), m_client(),
           m_state(UNCONNECTED) {}

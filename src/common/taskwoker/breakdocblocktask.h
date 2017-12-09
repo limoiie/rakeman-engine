@@ -5,10 +5,12 @@
 #ifndef RAKEMAN_ENGINE_BREAKDOCBLOCKTASK_H
 #define RAKEMAN_ENGINE_BREAKDOCBLOCKTASK_H
 
-#include <data/doc.h>
 #include <vector>
 #include <memory>
+
 #include "task.h"
+
+class Doc;
 
 class CBreakDocBlockTask : public ITask {
 public:

@@ -3,6 +3,9 @@
 //
 
 #include <raker/docindexer.h>
+#include <common/deport/deport.h>
+#include <common/factory/deportfactory.h>
+#include <common/factory/factoryfactory.h>
 #include "sortunsortedpostinglisttask.h"
 
 CSortUnsortedPostingListTask::CSortUnsortedPostingListTask(const std::string &term)
@@ -16,6 +19,19 @@ std::shared_ptr<ITask> CSortUnsortedPostingListTask::Deserialize(const std::stri
 }
 
 int CSortUnsortedPostingListTask::work() {
-    SortPostingListByTerm(m_term);
+    auto deport = CFactoryFactory::getInstance()
+            ->getDeportFactory()
+            ->get(CFactory<IDeport>::DEFAULT);
+
+    // step 1: fetch posting list by term
+    std::vector<std::list<PostingNode>> nodelists;
+    deport->fetchPostings(std::vector<std::string>{m_term}, nodelists);
+
+    // step 2: sort posting list
+    SortPostingList(nodelists[0]);
+
+    // step 3: store posting list by term
+    deport->deleteKey(std::vector<std::string>{m_term});
+    deport->storePostings(std::vector<std::string>{m_term}, nodelists);
     return 0;
 }

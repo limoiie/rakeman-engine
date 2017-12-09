@@ -7,8 +7,9 @@
 
 #include <string>
 #include <list>
-#include <data/postingsmap.h>
 #include <vector>
+
+#include <data/postingsmap.h>
 
 namespace saker {
 

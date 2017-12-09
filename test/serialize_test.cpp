@@ -5,6 +5,7 @@
 #include <string>
 #include <iostream>
 #include <data/postingsmap.h>
+#include <data/doc.h>
 
 #include "gtest/gtest.h"
 
@@ -64,6 +65,20 @@ namespace {
         ASSERT_EQ(temp, sample1);
         deserialize(container, offset, temp);
         ASSERT_EQ(temp, sample2);
+    }
+
+    TEST(SerializeTest, DocSerializeTest) { // NOLINT
+        Doc doc1 = {123, "", "This is content", "", ""};
+
+        size_t offset = 0;
+        std::string container;
+        serialize(doc1, container, offset);
+
+        offset = 0;
+        Doc fake;
+        deserialize(container, offset, fake);
+
+        ASSERT_EQ(doc1, fake);
     }
 
 } // namespace

@@ -17,7 +17,7 @@ typedef std::vector<std::pair<doc_id_t, std::vector<Term>>> doc_terms_pair_t;
  */
 static int term2posting(const doc_terms_pair_t &i_terms, PostingsMap& o_postings);
 
-void processDocs(const std::vector<Doc> &docs) {
+void ProcessDocs(const std::vector<Doc> &docs) {
     auto tokenizer = CFactoryFactory::getInstance()
             ->getTokenizerFactory()
             ->get(CFactory<ITokenizer>::DEFAULT);
@@ -33,7 +33,7 @@ void processDocs(const std::vector<Doc> &docs) {
     term2posting(doc_terms_pairs, postingsMap);
 }
 
-void sortPostingListByTerm(const std::string &term) {
+void SortPostingListByTerm(const std::string &term) {
     auto deport = CFactoryFactory::getInstance()
             ->getDeportFactory()
             ->get(CFactory<IDeport>::DEFAULT);

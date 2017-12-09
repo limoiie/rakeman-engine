@@ -10,8 +10,8 @@
 
 class Doc;
 
-void processDocs(const std::vector<Doc>& docs);
+void ProcessDocs(const std::vector<Doc> &docs);
 
-void sortPostingListByTerm(const std::string& term);
+void SortPostingListByTerm(const std::string &term);
 
 #endif //RAKEMAN_ENGINE_DOCINDEXER_H

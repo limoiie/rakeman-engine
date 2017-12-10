@@ -9,9 +9,10 @@
 #include <common/serializer.h>
 #include <raker/docindexer.h>
 #include <common/factory/factoryfactory.h>
+#include <core/termprocess.h>
 
-CBreakDocBlockTask::CBreakDocBlockTask(std::vector<Doc> docs)
-        : ITask(BREAK_DOCUMENT_BLOCK),
+CBreakDocBlockTask::CBreakDocBlockTask(task_id_t task_id, std::vector<Doc> docs)
+        : ITask(task_id, BREAK_DOCUMENT_BLOCK),
           m_docs(std::move(docs)) {
     // empty
 }
@@ -34,7 +35,7 @@ std::shared_ptr<ITask> CBreakDocBlockTask::Deserialize(const std::string &str) {
     return std::make_shared<CBreakDocBlockTask>(std::move(docs));
 }
 
-int CBreakDocBlockTask::work() {
+int CBreakDocBlockTask::work(ITaskQueue &queue) {
     auto deport = CFactoryFactory::getInstance()
             ->getDeportFactory()
             ->get(CFactory<IDeport>::DEFAULT);
@@ -46,6 +47,7 @@ int CBreakDocBlockTask::work() {
     }
     for (const auto &doc : m_docs) {
         Doc2Terms(doc, doc_id_map_terms[doc.id]);
+        filterOutX(doc_id_map_terms[doc.id]);
     }
 
     // step 2: merge terms into posting lists (leave the postings list unsorted
@@ -55,7 +57,7 @@ int CBreakDocBlockTask::work() {
     PostingsMap postingsMap;
     Terms2PostingList(doc_id_map_terms, postingsMap);
 
-    // step 3: store the posting lists into the deport.
-    deport->storePostings(postingsMap);
+    // step 3: append the posting lists into the deport.
+    deport->appendPostingsToTemp(postingsMap);
     return 0;
 }

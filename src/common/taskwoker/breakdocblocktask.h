@@ -14,13 +14,13 @@ class Doc;
 
 class CBreakDocBlockTask : public ITask {
 public:
-    explicit CBreakDocBlockTask(std::vector<Doc> docs);
+    explicit CBreakDocBlockTask(task_id_t task_id, std::vector<Doc> docs);
 
     /**
      *
      * @return Work status, 0 for success
      */
-    int work() override;
+    int work(ITaskQueue &queue) override;
 
     /**
      * Deserialize from string. TODO: consider replacing this with function

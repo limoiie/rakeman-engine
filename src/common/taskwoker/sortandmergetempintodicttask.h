@@ -8,11 +8,11 @@
 
 #include "task.h"
 
-class CSortUnsortedPostingListTask : public ITask {
+class CSortAndMergeTempIntoDictTask : public ITask {
 public:
-    explicit CSortUnsortedPostingListTask(const std::string &term);
+    explicit CSortAndMergeTempIntoDictTask(task_id_t task_id, const std::string &term);
 
-    int work() override;
+    int work(ITaskQueue &queue) override;
 
     static std::shared_ptr<ITask> Deserialize(const std::string &);
 

@@ -6,7 +6,7 @@
 #include <common/factory/factoryfactory.h>
 #include <common/taskwoker/breakdocblocktask.h>
 #include <raker/docindexer.h>
-#include <common/taskwoker/sortunsortedpostinglisttask.h>
+#include <common/taskwoker/sortandmergetempintodicttask.h>
 
 #include "gtest/gtest.h"
 
@@ -37,11 +37,10 @@ namespace {
         ASSERT_EQ(map[terms[3]].size(), static_cast<size_t>(2));
         ASSERT_EQ(map[terms[4]].size(), static_cast<size_t>(2));
 
-        deport.get()->deleteKey(std::vector<std::string>{
+        deport.get()->deleteTermsInTemp(std::vector<std::string>{
                 "this", "is", "the", "not", "your", "but", "mine", "content", "of"
         });
     }
-
 
     TEST(TastTest, SortUnsortedPostingListTask) { // NOLINT
         auto deport = CFactoryFactory::getInstance()
@@ -64,18 +63,18 @@ namespace {
                 {63},
         };
 
-        std::vector<std::list<PostingNode>> nodelists = {nodes};
-        deport->storePostings(std::vector<std::string>{key}, nodelists);
+        PostingsMap map;
+        map[key] = nodes;
+        deport->appendPostingsToTemp(map);
 
-        auto task = CSortUnsortedPostingListTask(key);
+        auto task = CSortAndMergeTempIntoDictTask(key);
         task.work();
 
-        nodelists[0].clear();
+        PostingsMap fake;
+        deport->fetchPostings(std::vector<std::string>{key}, fake);
+        ASSERT_EQ(sorted_nodes, fake[key]);
 
-        deport->fetchPostings(std::vector<std::string>{key}, nodelists);
-        ASSERT_EQ(nodelists[0], sorted_nodes);
-
-        deport->deleteKey(std::vector<std::string>{key});
+        deport->deleteTermsInDict(std::vector<std::string>{key});
     }
 
 }

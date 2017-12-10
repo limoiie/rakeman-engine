@@ -12,7 +12,7 @@ int main() {
         map["term1"] = {{123, 888}, {323, 999}, {7123, 777}};
         map["term2"] = {{324, 666}, {325, 555}, {7233, 111}};
         map["term3"] = {{589, 333}, {673, 222}, {7453, 444}};
-//        deport.storePostings(map);
+//        deport.storePostingsInDict(map);
 
         std::vector<std::string> terms{"term2", "term1", "term3"};
         PostingsMap fak;

@@ -34,15 +34,12 @@ namespace {
                 {"dislike", {{0}, {2}, {4}, {6}, {14}}},
         };
 
-        std::vector<std::string> ts_terms;
-        std::vector<std::list<PostingNode>> ts_nodelists;
-
+        PostingsMap map;
         // store test samples into deport
         for (const auto &sample_pair : test_samples) {
-            ts_terms.push_back(sample_pair.first);
-            ts_nodelists.push_back(sample_pair.second);
+            map[sample_pair.first] = sample_pair.second;
         }
-        deport->storePostings(ts_terms, ts_nodelists);
+        deport->storePostingsInDict(map);
 
         CQueryExpresser express;
         auto nodes = express.express(query_string);
@@ -52,7 +49,7 @@ namespace {
         ASSERT_EQ(nodes[2].doc_id, 5);
 
         // delete test data after test
-        deport->deleteKey(ts_terms);
+        deport->deleteTermsInTemp({"tomas", "like", "potato", "tomato", "dislike"});
     }
 }
 

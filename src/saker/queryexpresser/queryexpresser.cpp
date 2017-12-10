@@ -58,27 +58,27 @@ void saker::CQueryExpresser::__scanner_breakBlock(std::string &block) {
     auto tokenizer = CFactoryFactory::getInstance()
             ->getTokenizerFactory()
             ->get(CFactory<ITokenizer>::ProductType::DEFAULT);
-    std::vector<Term> terms, purge_terms;
+    std::vector<Term> terms;
     // tokenize string to terms which will contains ',.' ...
     tokenizer->tokenize(block, terms);
     // filter out ',.' ...
-    filterOutX(terms, purge_terms);
+    filterOutX(terms);
 
-    if (!purge_terms.empty()) {
-        if (purge_terms.size() > 1) {
+    if (!terms.empty()) {
+        if (terms.size() > 1) {
             m_elems.push_back(k_LT);
         }
 
         m_elems.push_back(static_cast<int>(m_terms.size()));
-        m_terms.push_back(purge_terms.front().term);
+        m_terms.push_back(terms.front().term);
 
-        for (unsigned int i = 1; i < purge_terms.size(); ++i) {
+        for (unsigned int i = 1; i < terms.size(); ++i) {
             m_elems.push_back(k_OR);
             m_elems.push_back(static_cast<int>(m_terms.size()));
-            m_terms.push_back(purge_terms[i].term);
+            m_terms.push_back(terms[i].term);
         }
 
-        if (purge_terms.size() > 1) {
+        if (terms.size() > 1) {
             m_elems.push_back(k_RT);
         }
     }

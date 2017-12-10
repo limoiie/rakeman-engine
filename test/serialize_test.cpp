@@ -7,6 +7,7 @@
 #include <data/postingsmap.h>
 
 #include <common/serializer.h>
+#include <common/integer2string.h>
 
 #include "gtest/gtest.h"
 
@@ -43,8 +44,13 @@ namespace {
 
     TEST(SerializeTest, PostingNodeSerialTest) { // NOLINT
         PostingNode node(1273, 2934854);
-        std::string s = PostingNode::Serialize(node);
-        PostingNode fake = PostingNode::Deserialize(s);
+        std::string s;
+        size_t offset = 0;
+        serialize(node, s, offset);
+        offset = 0;
+
+        PostingNode fake;
+        deserialize(s, offset, fake);
 
         ASSERT_EQ(node.doc_id, fake.doc_id);
         ASSERT_EQ(node.term_freq, fake.term_freq);
@@ -80,6 +86,44 @@ namespace {
         deserialize(container, offset, fake);
 
         ASSERT_EQ(doc1, fake);
+    }
+
+    TEST(SerializeTest, PostingNodeTest) { // NOLINT
+        size_t offset = 0;
+        std::string container;
+        PostingNode node {123, 214234};
+        serialize(node, container, offset);
+
+        offset = 0;
+
+        PostingNode fake;
+        deserialize(container, offset, fake);
+
+        ASSERT_EQ(node, fake);
+    }
+
+    TEST(SerializeTest, ListTest) { // NOLINT
+        size_t offset = 0;
+        std::string container;
+        std::list<PostingNode> nodes = {
+                {123, 214234},
+                {5234, 12312}
+        };
+        serialize(nodes, container, offset);
+
+        offset = 0;
+
+        std::list<PostingNode> fake;
+        deserialize(container, offset, fake);
+
+        ASSERT_EQ(nodes, fake);
+    }
+
+    TEST(Integer2StringTest, integer2string) { // NOLINT
+        long long int id = 1238184932;
+        std::string str_id = "1238184932";
+        std::string fake = Integer2String(id);
+        ASSERT_EQ(str_id, fake);
     }
 
 } // namespace

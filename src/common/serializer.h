@@ -7,6 +7,8 @@
 
 #include <string>
 #include <list>
+#include <vector>
+#include <data/postingsmap.h>
 #include <data/doc.h>
 
 typedef char char_t;
@@ -120,7 +122,7 @@ bool deserialize(const std::string &bytes, size_t &offset, std::string &val) {
 // TODO: This is not the complete version, fix up this if need
 template <>
 inline
-bool serialize<Doc>(const Doc &val, std::string &bytes, size_t &offset) {
+bool serialize(const Doc &val, std::string &bytes, size_t &offset) {
     serialize(val.id, bytes, offset);
     serialize(val.content, bytes, offset);
     return true;
@@ -129,10 +131,72 @@ bool serialize<Doc>(const Doc &val, std::string &bytes, size_t &offset) {
 // TODO: This is not the complete version, fix up this if need
 template <>
 inline
-bool deserialize<Doc>(const std::string &bytes, size_t &offset, Doc &val) {
+bool deserialize(const std::string &bytes, size_t &offset, Doc &val) {
     deserialize(bytes, offset, val.id);
     deserialize(bytes, offset, val.content);
     return true;
+}
+
+template <>
+inline
+bool serialize(const PostingNode &val, std::string &bytes, size_t &offset) {
+    serialize(val.doc_id, bytes, offset);
+    serialize(val.term_freq, bytes, offset);
+    return true;
+}
+
+template <>
+inline
+bool deserialize(const std::string &bytes, size_t &offset, PostingNode &val) {
+    deserialize(bytes, offset, val.doc_id);
+    deserialize(bytes, offset, val.term_freq);
+    return true;
+}
+
+template <typename T>
+inline
+bool serialize(const std::list<T> &val, std::string &bytes, size_t &offset) {
+    size_t size_of_val = val.size();
+    serialize(size_of_val, bytes, offset);
+    for (auto &i : val)
+        serialize(i, bytes, offset);
+    return true;
+}
+
+template <typename T>
+inline
+bool deserialize(const std::string &bytes, size_t &offset, std::list<T> &val) {
+    size_t size_of_val;
+    deserialize(bytes, offset, size_of_val);
+    for (size_t i = 0; i < size_of_val; ++i) {
+        T t;
+        deserialize(bytes, offset, t);
+        val.push_back(t);
+    }
+    return false;
+}
+
+template <typename T>
+inline
+bool serialize(const std::vector<T> &val, std::string &bytes, size_t &offset) {
+    size_t size_of_val = val.size();
+    serialize(size_of_val, bytes, offset);
+    for (auto &i : val)
+        serialize(i, bytes, offset);
+    return true;
+}
+
+template <typename T>
+inline
+bool deserialize(const std::string &bytes, size_t &offset, std::vector<T> &val) {
+    size_t size_of_val;
+    deserialize(bytes, offset, size_of_val);
+    for (size_t i = 0; i < size_of_val; ++i) {
+        T t;
+        deserialize(bytes, offset, t);
+        val.push_back(t);
+    }
+    return false;
 }
 
 #endif //RAKEMAN_ENGINE_SERIALIZER_H

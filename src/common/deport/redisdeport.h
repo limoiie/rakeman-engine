@@ -15,16 +15,22 @@ public:
 
     bool fetchPostings(const std::vector<std::string> &terms, PostingsMap &map) override;
     bool fetchPostings(const std::vector<std::string> &terms, std::vector<std::list<PostingNode>> &nodes) override;
-    bool storePostings(PostingsMap &map) override;
-    bool storePostings(const std::vector<std::string> &terms, std::vector<std::list<PostingNode>> &nodes) override;
 
-    bool deleteKey(const std::vector<std::string> &keys) override;
+    bool storePostingsInDict(PostingsMap &map) override;
+    bool appendPostingsToTemp(PostingsMap &map) override;
+
+    bool deleteTermsInDict(const std::vector<std::string> &keys) override;
+
+    bool deleteTermsInTemp(const std::vector<std::string> &keys) override;
 
     bool connect() override;
     bool disconnect() override;
     State connectState() override;
 
 private:
+    bool __fetchPostingsInTemp(const std::vector<std::string> &terms, PostingsMap &map);
+    bool __fetchPostingsInDict(const std::vector<std::string> &terms, PostingsMap &map);
+
     void __assertConnected();
 
     // redis host

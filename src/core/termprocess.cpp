@@ -5,10 +5,13 @@
 #include "termprocess.h"
 #include "data/term.h"
 
-void filterOutX(const std::vector<Term> &i_term, std::vector<Term> &o_term) {
-    for (auto &term : i_term) {
+void filterOutX(std::vector<Term> &io_term) {
+    std::vector<Term> temp;
+    std::swap(temp, io_term);
+
+    for (auto &term : temp) {
         if (term.prop != "x" && term.prop != "uj") {
-            o_term.push_back(term);
+            io_term.push_back(std::move(term));
         }
     }
 }

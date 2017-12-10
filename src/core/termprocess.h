@@ -9,6 +9,6 @@
 
 class Term;
 
-void filterOutX(const std::vector<Term> &i_term, std::vector<Term> &o_term);
+void filterOutX(std::vector<Term> &i_term);
 
 #endif //RAKEMAN_ENGINE_TERMPROCESS_H

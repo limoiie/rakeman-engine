@@ -44,6 +44,7 @@ void Terms2PostingList(const doc_id_map_terms_t &i_terms, PostingsMap &o_posting
     }
 }
 
+// not in used since now we store the temp postings in the sorted set in redis
 void SortPostingList(std::list<PostingNode> &io_terms) {
     // step 1: copy nodes from list into vector for doing quicker sort
     std::vector<PostingNode> nodes;

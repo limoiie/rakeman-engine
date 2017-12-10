@@ -12,7 +12,6 @@
 
 #include "map.h"
 #include "wrappedstlmap.hpp"
-#include "common/serializer.h"
 
 /**
  * @brief Posting Node
@@ -53,24 +52,6 @@ struct PostingNode {
 
     bool operator>=(const PostingNode &rhs) const {
         return !(*this < rhs);
-    }
-
-    static std::string Serialize(const PostingNode &node) {
-        std::string str;
-        size_t offset = 0;
-        serialize(node.doc_id, str, offset);
-        serialize(node.term_freq, str, offset);
-        // todo: add offset list serialize
-        return str;
-    }
-
-    static PostingNode Deserialize(const std::string &str) {
-        PostingNode node(-1);
-        size_t offset = 0;
-        deserialize(str, offset, node.doc_id);
-        deserialize(str, offset, node.term_freq);
-        // todo: add offset list deserialize
-        return node;
     }
 
 };

@@ -30,7 +30,7 @@ set(COMMON_SOURCE_FILES
         common/taskwoker/task.h
         common/taskwoker/woker.cpp
         common/taskwoker/task.cpp
-        )
+        common/integer2string.h)
 
 set(DATA_SOURCE_FILES
         data/doc.h
@@ -43,8 +43,8 @@ set(DATA_SOURCE_FILES
         data/redistaskqueue.h
         common/taskwoker/breakdocblocktask.cpp
         common/taskwoker/breakdocblocktask.h
-        common/taskwoker/sortunsortedpostinglisttask.cpp
-        common/taskwoker/sortunsortedpostinglisttask.h
+        common/taskwoker/sortandmergetempintodicttask.cpp
+        common/taskwoker/sortandmergetempintodicttask.h
         )
 
 add_library(rake_engine STATIC

@@ -73,6 +73,14 @@ public:
         return m_proxy.count(i_key);
     }
 
+    bool operator==(const CWrappedStlMap &rhs) const {
+        return m_proxy == rhs.m_proxy;
+    }
+
+    bool operator!=(const CWrappedStlMap &rhs) const {
+        return !(rhs == *this);
+    }
+
 private:
     std::map<K, V> m_proxy;
 

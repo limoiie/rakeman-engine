@@ -16,7 +16,7 @@ namespace {
 
     TEST(SerializeTest, IntsSerializeTest) { // NOLINT
         std::string str;
-        int t, x;
+        long long int t, x;
         size_t o, i;
         o = 0, i = 0;
 
@@ -31,15 +31,6 @@ namespace {
         x = -38457943;
         serialize(x, str, o);
         deserialize(str, i, t);
-
-        str.clear();
-        o = 0, i = 0;
-
-        double z, u = 123.4124;
-        serialize(u, str, o);
-        deserialize(str, i, z);
-
-        ASSERT_EQ(z, u);
     }
 
     TEST(SerializeTest, PostingNodeSerialTest) { // NOLINT

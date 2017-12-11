@@ -7,6 +7,7 @@
 #include <common/taskwoker/breakdocblocktask.h>
 #include <raker/docindexer.h>
 #include <common/taskwoker/sortandmergetempintodicttask.h>
+#include <data/redistaskqueue.h>
 
 #include "gtest/gtest.h"
 
@@ -18,9 +19,11 @@ namespace {
     Doc doc3 = { 12, "", "this is not your but mine", "", ""};
 
     TEST(TastTest, BreakDocBlockTaskTest) { // NOLINT
+        std::shared_ptr<ITaskQueue> queue = std::make_shared<CRedisTaskQueue>("127.0.0.1", 6379);
+
         std::vector<Doc> docs = {doc1, doc2, doc3};
-        CBreakDocBlockTask task = CBreakDocBlockTask(docs);
-        task.work();
+        CBreakDocBlockTask task = CBreakDocBlockTask(123, docs);
+        task.work(queue);
 
         auto deport = CFactoryFactory::getInstance()
                 ->getDeportFactory()
@@ -43,6 +46,8 @@ namespace {
     }
 
     TEST(TastTest, SortUnsortedPostingListTask) { // NOLINT
+        std::shared_ptr<ITaskQueue> queue = std::make_shared<CRedisTaskQueue>("127.0.0.1", 6379);
+
         auto deport = CFactoryFactory::getInstance()
                 ->getDeportFactory()
                 ->get(CFactory<IDeport>::DEFAULT);
@@ -67,8 +72,8 @@ namespace {
         map[key] = nodes;
         deport->appendPostingsToTemp(map);
 
-        auto task = CSortAndMergeTempIntoDictTask(key);
-        task.work();
+        auto task = CSortAndMergeTempIntoDictTask(234, key);
+        task.work(queue);
 
         PostingsMap fake;
         deport->fetchPostings(std::vector<std::string>{key}, fake);

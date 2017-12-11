@@ -2,6 +2,7 @@
 // Created by limo on 12/8/17.
 //
 
+#include <common/serializer.h>
 #include "redistaskqueue.h"
 
 // This string is used as the key of task queue in redis
@@ -9,6 +10,11 @@ const char *KEY_MSG_QUEUE = "TASK_QUEUE";
 
 // This string is used as the key of response queue in redis
 const char *KEY_RESPONSE_QUEUE = "RESPONSE_QUEUE";
+
+CRedisTaskQueue::CRedisTaskQueue(const std::string &host, size_t port)
+        : m_host(host), m_port(port), m_client(), m_state(UNCONNECTED) {
+    // empty
+}
 
 std::shared_ptr<ITask> CRedisTaskQueue::waitForPopTask() {
     __assertConnected();
@@ -21,8 +27,26 @@ std::shared_ptr<ITask> CRedisTaskQueue::waitForPopTask() {
         if (reply.get().is_error()) {
             // TODO: here should be a log
             std::cout << "Failed to pop out of task queue! Continue to pop" << std::endl;
+            continue;
         }
         return ITask::Deserialize(reply.get().as_string());
+    }
+}
+
+void CRedisTaskQueue::pushResponse(task_id_t task_id, std::string response) {
+    __assertConnected();
+
+    size_t offset = 0;
+    std::string container;
+    serialize(task_id, container, offset);
+    serialize(response, container, offset);
+
+    auto reply = m_client.rpush(KEY_RESPONSE_QUEUE, {container});
+    m_client.commit();
+
+    if (reply.get().is_error()) {
+        // TODO: here should be a log
+        std::cout << "Failed to pop out of task queue! Continue to pop" << std::endl;
     }
 }
 

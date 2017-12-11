@@ -19,6 +19,8 @@ public:
     };
 
     virtual std::shared_ptr<ITask> waitForPopTask() = 0;
+    virtual void pushResponse(task_id_t task_id, std::string response) = 0;
+
     virtual ~ITaskQueue() = default;
 
     // duplicated from %IDeport, consider to refactor

@@ -11,7 +11,10 @@
 // TODO: just copied from %CRedisDeport, consider refactoring
 class CRedisTaskQueue : public ITaskQueue {
 public:
+    CRedisTaskQueue(const std::string &host, size_t port);
+
     std::shared_ptr<ITask> waitForPopTask() override;
+    void pushResponse(task_id_t task_id, std::string response) override;
 
     bool connect() override;
     bool disconnect() override;

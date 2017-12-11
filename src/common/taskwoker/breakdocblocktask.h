@@ -20,7 +20,7 @@ public:
      *
      * @return Work status, 0 for success
      */
-    int work(ITaskQueue &queue) override;
+    int work(std::shared_ptr<ITaskQueue> &queue) override;
 
     /**
      * Deserialize from string. TODO: consider replacing this with function

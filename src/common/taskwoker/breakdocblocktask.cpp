@@ -10,6 +10,7 @@
 #include <raker/docindexer.h>
 #include <common/factory/factoryfactory.h>
 #include <core/termprocess.h>
+#include <data/taskqueue.h>
 
 CBreakDocBlockTask::CBreakDocBlockTask(task_id_t task_id, std::vector<Doc> docs)
         : ITask(task_id, BREAK_DOCUMENT_BLOCK),
@@ -23,8 +24,10 @@ CBreakDocBlockTask::CBreakDocBlockTask(task_id_t task_id, std::vector<Doc> docs)
 std::shared_ptr<ITask> CBreakDocBlockTask::Deserialize(const std::string &str) {
     size_t offset = 0;
     size_t num_docs = 0;
+    task_id_t task_id;
 
     // step 1: fetch the count of docs
+    deserialize(str, offset, task_id);
     deserialize(str, offset, num_docs);
 
     // step 2: deserialize doc one by one
@@ -32,10 +35,10 @@ std::shared_ptr<ITask> CBreakDocBlockTask::Deserialize(const std::string &str) {
     for (size_t i = 0; i < num_docs; ++i) {
         deserialize(str, offset, docs[i]);
     }
-    return std::make_shared<CBreakDocBlockTask>(std::move(docs));
+    return std::make_shared<CBreakDocBlockTask>(task_id, std::move(docs));
 }
 
-int CBreakDocBlockTask::work(ITaskQueue &queue) {
+int CBreakDocBlockTask::work(std::shared_ptr<ITaskQueue> &queue) {
     auto deport = CFactoryFactory::getInstance()
             ->getDeportFactory()
             ->get(CFactory<IDeport>::DEFAULT);
@@ -59,5 +62,8 @@ int CBreakDocBlockTask::work(ITaskQueue &queue) {
 
     // step 3: append the posting lists into the deport.
     deport->appendPostingsToTemp(postingsMap);
+
+    // step 4: response, and 1 for success
+    queue->pushResponse(m_task_id, "1");
     return 0;
 }

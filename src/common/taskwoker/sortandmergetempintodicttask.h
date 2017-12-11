@@ -12,7 +12,7 @@ class CSortAndMergeTempIntoDictTask : public ITask {
 public:
     explicit CSortAndMergeTempIntoDictTask(task_id_t task_id, const std::string &term);
 
-    int work(ITaskQueue &queue) override;
+    int work(std::shared_ptr<ITaskQueue> &queue) override;
 
     static std::shared_ptr<ITask> Deserialize(const std::string &);
 

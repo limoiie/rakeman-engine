@@ -13,8 +13,9 @@ const char *KEY_TM_DICT = "TEMP_DICTIONARY";
 const char *KEY_HM_DICT = "HASH_DICTIONARY";
 
 CRedisDeport::CRedisDeport(std::string host, size_t port)
-        : m_host(std::move(host)), m_port(port), m_client(),
-          m_state(UNCONNECTED) {}
+        : m_host(std::move(host)), m_port(port), m_client(), m_state(UNCONNECTED) {
+    // empty
+}
 
 bool CRedisDeport::connect() {
     // there can only be one thread to connect for each deport

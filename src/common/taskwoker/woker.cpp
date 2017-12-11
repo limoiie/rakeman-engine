@@ -17,7 +17,7 @@ CWoker::CWoker(std::shared_ptr<ITaskQueue> task_queue)
 void CWoker::operator()() {
     m_running = true;
     while (m_running) {
-        m_queue->waitForPopTask()->work();
+        m_queue->waitForPopTask()->work(m_queue);
         ++m_task_count;
     }
 }

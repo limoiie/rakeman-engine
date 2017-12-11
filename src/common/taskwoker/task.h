@@ -7,11 +7,13 @@
 
 #include <string>
 #include <memory>
-#include <data/taskqueue.h>
+
+class ITaskQueue;
 
 enum TaskType {
     BREAK_DOCUMENT_BLOCK,
-    SORT_UNSORTED_POSTING_LIST,
+    SORT_MERGE_POSTINGS,
+    QUERY_EXPRESS
 };
 
 typedef long long int task_id_t;
@@ -23,7 +25,7 @@ public:
               m_type(type) {}
     virtual ~ITask() = default;
 
-    virtual int work(ITaskQueue &queue) = 0;
+    virtual int work(std::shared_ptr<ITaskQueue> &queue) = 0;
 
     static std::shared_ptr<ITask> Deserialize(const std::string &str);
 

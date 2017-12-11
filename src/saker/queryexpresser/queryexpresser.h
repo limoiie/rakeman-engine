@@ -10,12 +10,13 @@
 #include <vector>
 
 #include <data/postingsmap.h>
+#include <data/doc.h>
 
 namespace saker {
 
     class CQueryExpresser {
     public:
-        std::vector<PostingNode> express(const std::string &query);
+        std::vector<doc_id_t> express(const std::string &query);
 
     private:
         /**
@@ -52,7 +53,7 @@ namespace saker {
         // used to store terms
         std::vector<std::string> m_terms;
         // used to store the execute result
-        std::vector<PostingNode> m_result;
+        std::vector<doc_id_t> m_result;
 
     };
 

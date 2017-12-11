@@ -45,7 +45,7 @@ set(DATA_SOURCE_FILES
         common/taskwoker/breakdocblocktask.h
         common/taskwoker/sortandmergetempintodicttask.cpp
         common/taskwoker/sortandmergetempintodicttask.h
-        )
+        common/taskwoker/queryexpresstask.cpp common/taskwoker/queryexpresstask.h)
 
 add_library(rake_engine STATIC
         ${COMMON_SOURCE_FILES}

@@ -15,7 +15,7 @@ static const int k_AD = -3;
 static const int k_OR = -2;
 static const int k_NT = -1;
 
-std::vector<PostingNode> saker::CQueryExpresser::express(const std::string &query) {
+std::vector<doc_id_t> saker::CQueryExpresser::express(const std::string &query) {
     __prepare();
     __scanner(query);
     __optimal();
@@ -115,7 +115,7 @@ void saker::CQueryExpresser::__execute() {
     // the result'index of execution is stored in the end of operands
     m_result.reserve(nodes[operands.back()].size());
     for (auto &node : nodes[operands.back()]) {
-        m_result.push_back(std::move(node));
+        m_result.push_back(node.doc_id);
     }
 }
 

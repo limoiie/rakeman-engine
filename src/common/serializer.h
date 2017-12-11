@@ -29,19 +29,26 @@ bool serialize(const T &val, std::string &bytes, size_t &offset) {
     // is the reserve right here?
     bytes.reserve(offset);
 
-    // step 1: calculate num of bytes in val and store the num into the first
-    //         byte from the %offset of bytes
-    size_t size_of_val = sizeof(val);
-    // todo: remove useless 0 in front of int and NOTE the negative impl
-    bytes.push_back(static_cast<char_t >(size_of_val));
+    // step 1: push a char to take up a place for size which will be set in next
+    //         few steps.
+    bytes.push_back('0');
 
+    size_t size_of_val = 0;
+    T tmp = val > 0 ? val : -val;
     // step 2: copy bytes in memory of val into container from the bottom
-    for (size_t i = 0; i < size_of_val; ++i) {
-        bytes.push_back(*((char_t *)(&val) + i));
+    while (tmp != 0) {
+        bytes.push_back(static_cast<char_t>(tmp));
+        tmp >>= 8;  // 8 bits for one char
+        ++size_of_val;
     }
 
-    // step 3: update %offset
-    offset += size_of_val + 1;
+    // step 3: set the size. 1st bit of flag indicates positive or negative,
+    //         the last indicates the length of the integer.
+    size_t flag = (val > 0 ? 0x00 : 0x80) | size_of_val;
+    bytes[offset] = static_cast<char_t>(flag);
+
+    // step 4: update %offset
+    offset += size_of_val + 1;  // 1 for the size char which has not been counted in
     return true;
 }
 
@@ -52,8 +59,12 @@ template <typename T>
 bool deserialize(const std::string &bytes, size_t &offset, T &val) {
     val = 0;
 
-    // step 1: num of memory bytes in the first byte of %bytes
-    auto size_of_val = static_cast<size_t>(bytes[offset]);
+    // step 1: extract information from the first byte in %bytes
+    //         the format of the first type: 1st bit indicates the sign
+    //         and remain bits indicate the num of bytes used to store
+    //         this integer.
+    auto is_negative = static_cast<bool>(bytes[offset] & 0x80);
+    auto size_of_val = static_cast<size_t>(bytes[offset] & 0x7F);
     ++offset;
 
     // step 2: copy memory bytes into %val
@@ -61,7 +72,10 @@ bool deserialize(const std::string &bytes, size_t &offset, T &val) {
         *((char_t *)(&val) + i) = bytes[offset+i];
     }
 
-    // step 3: update %offset
+    // step 3: update the sign of the val
+    if (is_negative) val = -val;
+
+    // step 4: update %offset
     offset += size_of_val;
     return true;
 }

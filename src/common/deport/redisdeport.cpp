@@ -8,9 +8,8 @@
 #include <common/integer2string.h>
 
 #include <saker/postingsop.hpp>
+#include <common/config.h>
 
-const char *KEY_TM_DICT = "TEMP_DICTIONARY";
-const char *KEY_HM_DICT = "HASH_DICTIONARY";
 
 CRedisDeport::CRedisDeport(std::string host, size_t port)
         : m_host(std::move(host)), m_port(port), m_client(), m_state(UNCONNECTED) {
@@ -64,6 +63,8 @@ CRedisDeport::State CRedisDeport::connectState() {
 }
 
 bool CRedisDeport::fetchPostings(const std::vector<std::string> &terms, PostingsMap &map) {
+    __assertConnected();
+
     PostingsMap map1, map2;
     if (__fetchPostingsInDict(terms, map1)) {
         if (__fetchPostingsInTemp(terms, map2)) {
@@ -77,6 +78,8 @@ bool CRedisDeport::fetchPostings(const std::vector<std::string> &terms, Postings
 }
 
 bool CRedisDeport::fetchPostings(const std::vector<std::string> &terms, std::vector<std::list<PostingNode>> &nodes) {
+    __assertConnected();
+
     PostingsMap map;
     if (fetchPostings(terms, map)) {
         for (auto & term : terms)

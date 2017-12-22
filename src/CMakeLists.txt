@@ -45,7 +45,7 @@ set(DATA_SOURCE_FILES
         common/taskwoker/breakdocblocktask.h
         common/taskwoker/sortandmergetempintodicttask.cpp
         common/taskwoker/sortandmergetempintodicttask.h
-        common/taskwoker/queryexpresstask.cpp common/taskwoker/queryexpresstask.h)
+        common/taskwoker/queryexpresstask.cpp common/taskwoker/queryexpresstask.h common/taskwoker/response.h common/taskwoker/response.cpp common/log.h "common/log.cpp")
 
 add_library(rake_engine STATIC
         ${COMMON_SOURCE_FILES}
@@ -53,4 +53,8 @@ add_library(rake_engine STATIC
         ${DATA_SOURCE_FILES}
         ${RAKER_SOURCE_FILES}
         ${SAKER_SOURCE_FILES}
-        )
+        common/config.h main.cpp)
+
+add_executable(rake_engine_exec main.cpp)
+target_link_libraries(rake_engine_exec rake_engine)
+target_link_libraries(rake_engine_exec cppredis)

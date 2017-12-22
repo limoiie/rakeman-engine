@@ -16,12 +16,14 @@ void Doc2Terms(const Doc &i_doc, std::vector<Term> &o_terms) {
     tokenizer->tokenize(i_doc.content, o_terms);
 }
 
-void Terms2PostingList(const doc_id_map_terms_t &i_terms, PostingsMap &o_postings) {
+void Terms2PostingList(const std::map<doc_id_t, std::vector<Term>> &i_terms,
+                       PostingsMap &o_postings) {
+
     if (i_terms.empty()) return;
     // process document by document
-    for (auto &doc_id_terms : i_terms) {
-        auto doc_id = doc_id_terms.first;
-        auto terms_by_doc = doc_id_terms.second;
+    for (auto itr = i_terms.begin(); itr != i_terms.end(); ++itr) {
+        auto doc_id = itr->first;
+        auto terms_by_doc = itr->second;
 
         if (!terms_by_doc.empty()) {
             // sort the terms in one document

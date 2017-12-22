@@ -27,6 +27,7 @@ void saker::CQueryExpresser::__prepare() {
     m_offset = 0;
     m_result.clear();
     m_elems.clear();
+    m_terms.clear();
 }
 
 void saker::CQueryExpresser::__scanner(const std::string &query, char stop_c) {
@@ -64,6 +65,7 @@ void saker::CQueryExpresser::__scanner_breakBlock(std::string &block) {
     // filter out ',.' ...
     filterOutX(terms);
 
+    // TODO: consider using tf-idf to replace current bool-op
     if (!terms.empty()) {
         if (terms.size() > 1) {
             m_elems.push_back(k_LT);

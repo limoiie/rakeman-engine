@@ -19,7 +19,7 @@ public:
     };
 
     virtual std::shared_ptr<ITask> waitForPopTask() = 0;
-    virtual void pushResponse(task_id_t task_id, std::string response) = 0;
+    virtual void pushResponse(task_id_t task_id, TaskType type, bool success, std::string response) = 0;
 
     virtual ~ITaskQueue() = default;
 

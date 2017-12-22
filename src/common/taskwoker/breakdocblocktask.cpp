@@ -11,6 +11,7 @@
 #include <common/factory/factoryfactory.h>
 #include <core/termprocess.h>
 #include <data/taskqueue.h>
+#include <common/log.h>
 
 CBreakDocBlockTask::CBreakDocBlockTask(task_id_t task_id, std::vector<Doc> docs)
         : ITask(task_id, BREAK_DOCUMENT_BLOCK),
@@ -35,6 +36,8 @@ std::shared_ptr<ITask> CBreakDocBlockTask::Deserialize(const std::string &str) {
     for (size_t i = 0; i < num_docs; ++i) {
         deserialize(str, offset, docs[i]);
     }
+
+    limo::log_break_task(task_id, num_docs);
     return std::make_shared<CBreakDocBlockTask>(task_id, std::move(docs));
 }
 
@@ -64,6 +67,8 @@ int CBreakDocBlockTask::work(std::shared_ptr<ITaskQueue> &queue) {
     deport->appendPostingsToTemp(postingsMap);
 
     // step 4: response, and 1 for success
-    queue->pushResponse(m_task_id, "1");
+    queue->pushResponse(m_task_id, BREAK_DOCUMENT_BLOCK, true, "");
+
+    limo::log_break_response(m_task_id, true, m_docs.size());
     return 0;
 }

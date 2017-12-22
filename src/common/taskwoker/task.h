@@ -11,7 +11,7 @@
 class ITaskQueue;
 
 enum TaskType {
-    BREAK_DOCUMENT_BLOCK,
+    BREAK_DOCUMENT_BLOCK = 0,
     SORT_MERGE_POSTINGS,
     QUERY_EXPRESS
 };

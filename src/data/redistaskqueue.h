@@ -14,7 +14,7 @@ public:
     CRedisTaskQueue(const std::string &host, size_t port);
 
     std::shared_ptr<ITask> waitForPopTask() override;
-    void pushResponse(task_id_t task_id, std::string response) override;
+    void pushResponse(task_id_t task_id, TaskType type, bool success, std::string response) override;
 
     bool connect() override;
     bool disconnect() override;

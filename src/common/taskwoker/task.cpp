@@ -3,6 +3,8 @@
 //
 
 #include <stdexcept>
+#include <spdlog/spdlog.h>
+#include <common/config.h>
 #include "task.h"
 #include "breakdocblocktask.h"
 #include "sortandmergetempintodicttask.h"

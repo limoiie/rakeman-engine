@@ -20,7 +20,7 @@ namespace {
         size_t o, i;
         o = 0, i = 0;
 
-        x = 38457943;
+        x = -38457943;
         serialize(x, str, o);
         deserialize(str, i, t);
         ASSERT_EQ(t, x);
@@ -31,6 +31,23 @@ namespace {
         x = -38457943;
         serialize(x, str, o);
         deserialize(str, i, t);
+        ASSERT_EQ(t, x);
+
+        str.clear();
+        o = 0, i = 0;
+
+        double s = 0, y = -38457.943;
+        serialize(y, str, o);
+        deserialize(str, i, s);
+        ASSERT_EQ(y, s);
+
+        str.clear();
+        o = 0, i = 0;
+
+        s = 0, y = 38457.943;
+        serialize(y, str, o);
+        deserialize(str, i, s);
+        ASSERT_EQ(y, s);
     }
 
     TEST(SerializeTest, PostingNodeSerialTest) { // NOLINT

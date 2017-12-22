@@ -24,6 +24,7 @@ typedef char char_t;
  *               NOTE: This param will be updated to the bottom of container.
  * @return Serialize status
  */
+/*
 template <typename T>
 bool serialize(const T &val, std::string &bytes, size_t &offset) {
     // is the reserve right here?
@@ -48,6 +49,54 @@ bool serialize(const T &val, std::string &bytes, size_t &offset) {
     bytes[offset] = static_cast<char_t>(flag);
 
     // step 4: update %offset
+    offset += size_of_val + 1;  // 1 for the size char which has not been counted in
+    return true;
+}
+*/
+
+/**
+ * Implement of Integer family.
+ * The format of serialized: num_of_bytes_used_to_store_val|val_memory_bytes
+ *
+ * @tparam T Integer family: int, size_t, long ...
+ * @param val Integer value going to be serialized
+ * @param bytes Serialized string container
+ * @param offset From where the serialized string should store in container.
+ *               NOTE: This param will be updated to the bottom of container.
+ * @return Serialize status
+ */
+template <typename T>
+bool serialize(const T &val, std::string &bytes, size_t &offset) {
+    // is the reserve right here?
+    bytes.reserve(offset);
+
+    // step 1: push a char to take up a place for size which will be set in next
+    //         few steps.
+    bytes.push_back('0');
+
+    size_t size_of_val = sizeof(T);
+    T tmp = val > 0 ? val : -val;
+    auto *p_addr = reinterpret_cast<char *>(&tmp);
+
+    // step 2: remove the empty char
+    size_t i = size_of_val - 1;
+    while (*(p_addr + i) == '\0') {
+        if (i == 0) break;
+        --i;
+    }
+    size_of_val = i+1;
+
+    // step 3: copy bytes in memory of val into container from the bottom
+    for (size_t k = 0; k < size_of_val; ++k) {
+        bytes.push_back(*(p_addr + k));
+    }
+
+    // step 4: set the size. 1st bit of flag indicates positive or negative,
+    //         the last indicates the length of the integer.
+    size_t flag = (val > 0 ? 0x00 : 0x80) | size_of_val;
+    bytes[offset] = static_cast<char_t>(flag);
+
+    // step 5: update %offset
     offset += size_of_val + 1;  // 1 for the size char which has not been counted in
     return true;
 }

@@ -57,10 +57,6 @@ namespace {
      */
 
     TEST(QueryExpresserTests, CQueryExpresser2) { // NOLINT
-        CQueryExpresser express;
-        auto nodes = express.express("微风习习 透漏");
-
-
 //        std::vector<std::string> vs;
 //        vs.push_back("test");
 //        auto deport = CFactoryFactory::getInstance()

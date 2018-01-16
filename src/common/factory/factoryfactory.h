@@ -8,6 +8,7 @@
 #include <memory>
 #include <common/deport/deport.h>
 #include <core/tokenizer.h>
+#include <core/wilermatcher.h>
 #include "deportfactory.h"
 #include "tokenizerfactory.h"
 
@@ -28,10 +29,15 @@ public:
         return m_tokenizer_factory;
     }
 
+    std::shared_ptr<CWilderMatcher> getWilderMatcher() {
+        return m_wilder_matcher;
+    }
+
 private:
     static std::shared_ptr<CFactoryFactory> m_instance;
     std::shared_ptr<CFactory<IDeport>> m_deport_factory;
     std::shared_ptr<CFactory<ITokenizer>> m_tokenizer_factory;
+    std::shared_ptr<CWilderMatcher> m_wilder_matcher;
 
 };
 

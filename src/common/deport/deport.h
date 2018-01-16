@@ -18,11 +18,15 @@ public:
         CONNECTED
     };
 
+    virtual size_t countDocs() = 0;
+
     virtual bool fetchPostings(const std::vector<std::string> &terms, PostingsMap &map) = 0;
     virtual bool fetchPostings(const std::vector<std::string> &terms, std::vector<std::list<PostingNode>> &nodes) = 0;
 
     virtual bool storePostingsInDict(PostingsMap &map) = 0;
     virtual bool appendPostingsToTemp(PostingsMap &map) = 0;
+
+    virtual bool addHotNERCounts(const std::map<std::string, int> &counts) = 0;
 
     virtual bool deleteTermsInDict(const std::vector<std::string> &keys) = 0;
     virtual bool deleteTermsInTemp(const std::vector<std::string> &keys) = 0;

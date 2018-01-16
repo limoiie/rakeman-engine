@@ -32,7 +32,9 @@ namespace saker {
          * Break the query block which contains no operators but is too big
          * into smaller string block and some meaningful operators.
          */
-        void __scanner_breakBlock(std::string &block);
+        void __scanner_breakBlock(const std::string &block);
+
+        void __scanner_wildMatcher(const std::string &str);
 
         /**
          * Optimize the syntax structure: remove redundancy string block...

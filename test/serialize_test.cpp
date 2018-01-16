@@ -134,6 +134,13 @@ namespace {
         ASSERT_EQ(str_id, fake);
     }
 
+    TEST(Integer2StringTest, string2integer) { // NOLINT
+        long long int id = 1238184932;
+        std::string str_id = "1238184932";
+        auto fake = String2Integer<long long int>(str_id);
+        ASSERT_EQ(id, fake);
+    }
+
 } // namespace
 
 int main(int argc, char **argv) {

@@ -21,17 +21,48 @@ struct PostingNode {
     int term_freq;
     std::list<int> term_offsets{};
 
+    double wf_idf;
+
     PostingNode(long long int i_doc_id = -1, // NOLINT
                 int i_tf = 0,
-                std::list<int> i_offsets = {})
+                std::list<int> i_offsets = {},
+                double i_wf_idf = 0)
             : doc_id(i_doc_id),
-              term_freq(i_tf),
-              term_offsets(std::move(i_offsets)) {}
+              term_offsets(std::move(i_offsets)),
+              wf_idf(i_wf_idf) {}
+
+    PostingNode(const PostingNode &c) {
+        doc_id = c.doc_id;
+        term_freq = c.term_freq;
+//  TODO      term_offsets = c.term_offsets;
+        wf_idf = c.wf_idf;
+    }
+
+    PostingNode(PostingNode &&c) noexcept {
+        doc_id = c.doc_id;
+        term_freq = c.term_freq;
+//  TODO      term_offsets = std::move(c.term_offsets);
+        wf_idf = c.wf_idf;
+    }
+
+    PostingNode& operator=(const PostingNode& c) {
+        doc_id = c.doc_id;
+        term_freq = c.term_freq;
+//  TODO      term_offsets = c.term_offsets;
+        wf_idf = c.wf_idf;
+        return *this;
+    }
+
+    PostingNode& operator=(PostingNode&& c) noexcept {
+        doc_id = c.doc_id;
+        term_freq = c.term_freq;
+//  TODO      term_offsets = std::move(c.term_offsets);
+        wf_idf = c.wf_idf;
+        return *this;
+    }
 
     bool operator==(const PostingNode &rhs) const {
-        return doc_id == rhs.doc_id &&
-               term_freq == rhs.term_freq &&
-               term_offsets == rhs.term_offsets;
+        return doc_id == rhs.doc_id;
     }
 
     bool operator!=(const PostingNode &rhs) const {

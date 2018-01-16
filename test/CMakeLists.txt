@@ -17,6 +17,7 @@ add_executable(run_serialize_tests serialize_test.cpp)
 add_executable(run_queryexpresser queryexpresser_test.cpp)
 add_executable(run_task_test task_test.cpp)
 add_executable(run_log_test log_test.cpp)
+add_executable(run_ever ever.cpp)
 
 target_link_libraries(run_core_tests gtest gtest_main)
 target_link_libraries(run_core_tests rake_engine)
@@ -40,3 +41,6 @@ target_link_libraries(cpp_redis_tests rake_engine)
 target_link_libraries(cpp_redis_tests cppredis)
 
 target_link_libraries(run_log_test gtest gtest_main)
+
+target_link_libraries(run_ever rake_engine)
+target_link_libraries(run_ever cppredis)

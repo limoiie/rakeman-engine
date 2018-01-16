@@ -11,10 +11,10 @@ set(RAKER_SOURCE_FILES
         raker/docindexer.cpp raker/docindexer.h)
 
 set(SAKER_SOURCE_FILES
-        saker/postingsop.hpp
+        saker/postingsop.h
         saker/queryexpresser/queryexpresser.h
         saker/queryexpresser/queryexpresser.cpp
-        )
+        saker/postingsop.cpp)
 
 set(COMMON_SOURCE_FILES
         common/deport/deport.h
@@ -30,7 +30,7 @@ set(COMMON_SOURCE_FILES
         common/taskwoker/task.h
         common/taskwoker/woker.cpp
         common/taskwoker/task.cpp
-        common/integer2string.h)
+        common/integer2string.h common/string2wstring.h common/string2wstring.cpp)
 
 set(DATA_SOURCE_FILES
         data/doc.h
@@ -45,7 +45,7 @@ set(DATA_SOURCE_FILES
         common/taskwoker/breakdocblocktask.h
         common/taskwoker/sortandmergetempintodicttask.cpp
         common/taskwoker/sortandmergetempintodicttask.h
-        common/taskwoker/queryexpresstask.cpp common/taskwoker/queryexpresstask.h common/taskwoker/response.h common/taskwoker/response.cpp common/log.h "common/log.cpp")
+        common/taskwoker/queryexpresstask.cpp common/taskwoker/queryexpresstask.h common/taskwoker/response.h common/taskwoker/response.cpp common/log.h "common/log.cpp" core/wilermatcher.cpp core/wilermatcher.h)
 
 add_library(rake_engine STATIC
         ${COMMON_SOURCE_FILES}

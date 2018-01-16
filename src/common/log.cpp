@@ -23,7 +23,7 @@ namespace limo {
     }
 
     void log_merge_task(task_id_t task_id, const std::string &sentence) {
-        console->info("Get BreakTask {0:08d}: {1}", task_id, sentence);
+       console->info("Get BreakTask {0:08d}: {1}", task_id, sentence);
     }
 
     void log_query_response(task_id_t task_id, bool success, size_t num_ids) {
@@ -41,10 +41,10 @@ namespace limo {
     }
 
     void log_merge_response(task_id_t task_id, bool success, size_t num_postings) {
-        if (success)
-            console->info("Response MergeTask {0:08d}: Success {1:04d} docs", task_id, num_postings);
-        else
-            console->error("Response MergeTask {0:08}: Failed", task_id);
+       if (success)
+           console->info("Response MergeTask {0:08d}: Success {1:04d} docs", task_id, num_postings);
+       else
+           console->error("Response MergeTask {0:08}: Failed", task_id);
     }
 
 }

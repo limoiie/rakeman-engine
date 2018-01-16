@@ -19,4 +19,14 @@ std::string Integer2String(T t) {
     return container;
 }
 
+template <typename T>
+T String2Integer(const std::string& str) {
+    T res = 0;
+    for (auto c : str) {
+        res *= 10;
+        res += (c-'0');
+    }
+    return res;
+}
+
 #endif //RAKEMAN_ENGINE_INTEGER2STRING_H

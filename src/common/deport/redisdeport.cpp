@@ -7,7 +7,7 @@
 #include <common/serializer.h>
 #include <common/integer2string.h>
 
-#include <saker/postingsop.hpp>
+#include <saker/postingsop.h>
 #include <common/config.h>
 
 
@@ -212,6 +212,35 @@ bool CRedisDeport::__fetchPostingsInDict(const std::vector<std::string> &terms, 
             size_t offset = 0;
             deserialize(replies[i].as_string(), offset, map[terms[i]]);
         }
+    }
+    return true;
+}
+
+size_t CRedisDeport::countDocs() {
+    __assertConnected();
+    auto fut = m_client.get(KEY_COUNT_DOCUMENTS);
+    m_client.commit();
+    auto rep = fut.get();
+    if (rep.ok()) {
+        return String2Integer<size_t>(rep.as_string());
+    }
+    throw std::runtime_error("Failed to delete keys in hm!");
+}
+
+bool CRedisDeport::addHotNERCounts(const std::map<std::string, int> &counts) {
+    __assertConnected();
+    std::vector<std::future<cpp_redis::reply>> futures;
+
+    for (const auto& p : counts) {
+        futures.push_back(m_client.hincrby(KEY_HM_HOT_WORD, p.first, p.second));
+    }
+
+    m_client.commit();
+
+    for (auto &future : futures) {
+        auto reply = future.get();
+        if (reply.is_error())
+            throw std::runtime_error("Failed to add hot ner counts!");
     }
     return true;
 }

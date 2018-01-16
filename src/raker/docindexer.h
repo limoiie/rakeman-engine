@@ -20,6 +20,4 @@ void Doc2Terms(const Doc &i_doc, std::vector<Term> &o_terms);
 
 void Terms2PostingList(const doc_id_map_terms_t &i_terms, PostingsMap &o_postings);
 
-void SortPostingList(std::list<PostingNode> &io_terms);
-
 #endif //RAKEMAN_ENGINE_DOCINDEXER_H

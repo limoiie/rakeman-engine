@@ -51,9 +51,12 @@ int CBreakDocBlockTask::work(std::shared_ptr<ITaskQueue> &queue) {
     for (const auto &doc : m_docs) {
         doc_id_map_terms[doc.id] = {};
     }
+
+    std::map<std::string, int> counts;
     for (const auto &doc : m_docs) {
         Doc2Terms(doc, doc_id_map_terms[doc.id]);
         filterOutX(doc_id_map_terms[doc.id]);
+        countNER(doc_id_map_terms[doc.id], counts);
     }
 
     // step 2: merge terms into posting lists (leave the postings list unsorted
@@ -70,5 +73,6 @@ int CBreakDocBlockTask::work(std::shared_ptr<ITaskQueue> &queue) {
     queue->pushResponse(m_task_id, BREAK_DOCUMENT_BLOCK, true, "");
 
     limo::log_break_response(m_task_id, true, m_docs.size());
+
     return 0;
 }

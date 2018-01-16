@@ -13,14 +13,17 @@ class CRedisDeport : public IDeport {
 public:
     explicit CRedisDeport(std::string host, size_t port);
 
+    size_t countDocs() override;
+
     bool fetchPostings(const std::vector<std::string> &terms, PostingsMap &map) override;
     bool fetchPostings(const std::vector<std::string> &terms, std::vector<std::list<PostingNode>> &nodes) override;
 
     bool storePostingsInDict(PostingsMap &map) override;
     bool appendPostingsToTemp(PostingsMap &map) override;
 
-    bool deleteTermsInDict(const std::vector<std::string> &keys) override;
+    bool addHotNERCounts(const std::map<std::string, int> &counts) override;
 
+    bool deleteTermsInDict(const std::vector<std::string> &keys) override;
     bool deleteTermsInTemp(const std::vector<std::string> &keys) override;
 
     bool connect() override;

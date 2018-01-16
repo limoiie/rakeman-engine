@@ -187,6 +187,7 @@ template <>
 inline
 bool serialize(const Doc &val, std::string &bytes, size_t &offset) {
     serialize(val.id, bytes, offset);
+    serialize(val.title, bytes, offset);
     serialize(val.content, bytes, offset);
     return true;
 }
@@ -196,6 +197,7 @@ template <>
 inline
 bool deserialize(const std::string &bytes, size_t &offset, Doc &val) {
     deserialize(bytes, offset, val.id);
+    deserialize(bytes, offset, val.title);
     deserialize(bytes, offset, val.content);
     return true;
 }

@@ -12,7 +12,11 @@ void Doc2Terms(const Doc &i_doc, std::vector<Term> &o_terms) {
             ->getTokenizerFactory()
             ->get(CFactory<ITokenizer>::DEFAULT);
 
+    size_t start_ind = o_terms.size();
     tokenizer->tokenize(i_doc.title, o_terms);
+    for (size_t i = start_ind; i < o_terms.size(); ++i) {
+        o_terms[i].location = LOC_TITLE;
+    }
     tokenizer->tokenize(i_doc.content, o_terms);
 }
 
@@ -30,33 +34,27 @@ void Terms2PostingList(const std::map<doc_id_t, std::vector<Term>> &i_terms,
             std::sort(terms_by_doc.begin(), terms_by_doc.end());
 
             std::list<int> offsets;
+            int term_freq = 0;
             auto cur_term = terms_by_doc.front().term;
             for (auto &term : terms_by_doc) {
+                int special_n = 1;
+                if (term.prop[0] == 'n' && term.prop.size() >= 2 &&
+                        (term.prop[1] == 'r' || term.prop[2] == 't')) {
+                    special_n = 4;
+                }
                 if (cur_term == term.term) {  // store offsets of same terms into a list
-                    offsets.push_back(term.offset);
+                    if (term.location == LOC_TITLE) // !!!!!!NOTE: TRICK IMPL
+                        term_freq += 150 * special_n;
+                    else if (term.location == LOC_CONTENT)
+                        term_freq += 1 * special_n;
                 } else {  // all the same terms has been scanned
-                    o_postings[cur_term].emplace_back(doc_id, offsets.size(), offsets);
+                    o_postings[cur_term].emplace_back(doc_id, term_freq, offsets);
                     cur_term = term.term;
-                    offsets.clear();
+                    term_freq = 0;
                 }
             }
             // the last term in the last doc has not been stored
-            o_postings[cur_term].emplace_back(doc_id, offsets.size(), offsets);
+            o_postings[cur_term].emplace_back(doc_id, term_freq, offsets);
         }
-    }
-}
-
-// not in used since now we store the temp postings in the sorted set in redis
-void SortPostingList(std::list<PostingNode> &io_terms) {
-    // step 1: copy nodes from list into vector for doing quicker sort
-    std::vector<PostingNode> nodes;
-    for (auto &node : io_terms)
-        nodes.push_back(std::move(node));
-    io_terms.clear();
-
-    // step 2: sort nodes and store the sorted nodes into nodelist
-    std::sort(nodes.begin(), nodes.end());
-    for (auto &node : nodes) {
-        io_terms.push_back(std::move(node));
     }
 }
